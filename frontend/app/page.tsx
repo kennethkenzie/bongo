@@ -1,0 +1,61 @@
+import CategorySidebar from "@/components/home/CategorySidebar";
+import HeroBanner from "@/components/home/HeroBanner";
+import PromoColumn from "@/components/home/PromoColumn";
+import PromoStrip from "@/components/home/PromoStrip";
+import FlashDeals from "@/components/home/FlashDeals";
+import SectionHeader from "@/components/home/SectionHeader";
+import TopCategories from "@/components/home/TopCategories";
+import HorizontalRail from "@/components/home/HorizontalRail";
+import ProductGrid from "@/components/product/ProductGrid";
+import { recommended, trending, moreToLove, topCategoryShortcuts } from "@/lib/data";
+import Link from "next/link";
+
+export default function HomePage() {
+  return (
+    <div className="space-y-2">
+      {/* Mobile category shortcuts row */}
+      <section className="md:hidden card p-3 -mx-3 rounded-none border-x-0">
+        <div className="grid grid-cols-5 gap-3">
+          {topCategoryShortcuts.slice(0, 10).map((c) => (
+            <Link key={c.slug} href={`/category/${c.slug}`} className="flex flex-col items-center gap-1">
+              <div className="w-12 h-12 rounded-sm overflow-hidden border border-line">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={c.image} alt={c.name} className="w-full h-full object-cover" />
+              </div>
+              <span className="text-[10px] text-ink-soft line-clamp-1">{c.name.split(" ")[0]}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Hero + Sidebar + Promo column */}
+      <section className="flex gap-3">
+        <CategorySidebar />
+        <HeroBanner />
+        <PromoColumn />
+      </section>
+
+      {/* Promo strip */}
+      <PromoStrip />
+
+      {/* Flash deals */}
+      <FlashDeals />
+
+      {/* Top categories */}
+      <SectionHeader title="Top Categories" href="/categories" />
+      <TopCategories />
+
+      {/* Recommended */}
+      <SectionHeader title="Just For You" accent="Recommended" href="#" />
+      <ProductGrid products={recommended} />
+
+      {/* Trending */}
+      <SectionHeader title="Trending Now" accent="🔥 Hot" href="#" />
+      <HorizontalRail products={trending} />
+
+      {/* More to love */}
+      <SectionHeader title="More to Love" accent="Recently viewed" href="#" />
+      <ProductGrid products={moreToLove} cols="dense" compact />
+    </div>
+  );
+}
