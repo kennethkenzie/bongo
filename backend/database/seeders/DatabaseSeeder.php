@@ -12,9 +12,24 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        User::firstOrCreate(
+        // Admin user (can access /admin)
+        User::updateOrCreate(
             ['email' => 'demo@estatebongo.com'],
-            ['name' => 'Demo Shopper', 'password' => 'password']
+            [
+                'name'     => 'Demo Admin',
+                'password' => 'password',
+                'role'     => User::ROLE_ADMIN,
+            ]
+        );
+
+        // Regular customer (can shop, cannot access /admin)
+        User::updateOrCreate(
+            ['email' => 'shopper@estatebongo.com'],
+            [
+                'name'     => 'Demo Shopper',
+                'password' => 'password',
+                'role'     => User::ROLE_CUSTOMER,
+            ]
         );
 
         $categories = [

@@ -7,6 +7,7 @@
 @section('content')
 <form method="POST"
       action="{{ $isEdit ? route('admin.products.update', $product) : route('admin.products.store') }}"
+      enctype="multipart/form-data"
       class="bg-white rounded-sm border border-line p-6 max-w-3xl">
   @csrf
   @if ($isEdit) @method('PUT') @endif
@@ -59,11 +60,58 @@
         class="mt-1 w-full border border-line rounded-sm px-3 py-2 focus:outline-none focus:border-brand-600">
     </label>
 
-    <label class="block md:col-span-2">
-      <span class="text-xs text-gray-500">Image URL</span>
-      <input name="image" required value="{{ old('image', $product->image ?? '') }}"
-        class="mt-1 w-full border border-line rounded-sm px-3 py-2 focus:outline-none focus:border-brand-600">
-    </label>
+    <div class="md:col-span-2">
+      <span class="text-xs text-gray-500">Product image</span>
+      <div class="mt-1 flex items-start gap-3">
+        @if (!empty($product->image))
+          <img id="imgPreview" src="{{ $product->image }}" alt="" class="w-24 h-24 object-cover rounded-sm border border-line">
+        @else
+          <div id="imgPreview" class="w-24 h-24 grid place-items-center bg-surface border border-line rounded-sm text-xs text-gray-400">No image</div>
+        @endif
+        <div class="flex-1 space-y-2">
+          <label class="block">
+            <span class="text-xs text-gray-500">Upload from your computer</span>
+            <input type="file" name="image_file" accept="image/*" id="imgInput"
+              class="mt-1 block w-full text-sm file:mr-3 file:px-3 file:py-1.5 file:rounded-sm file:border-0 file:bg-brand-600 file:text-white hover:file:bg-brand-700">
+            <span class="block text-[11px] text-gray-400 mt-1">JPG, PNG, WebP, or GIF up to 4 MB.</span>
+          </label>
+          <label class="block">
+            <span class="text-xs text-gray-500">…or paste an image URL</span>
+            <input name="image" value="{{ old('image', $product->image ?? '') }}" id="imgUrl"
+              placeholder="https://…"
+              class="mt-1 w-full border border-line rounded-sm px-3 py-2 focus:outline-none focus:border-brand-600">
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const input = document.getElementById('imgInput');
+        const urlField = document.getElementById('imgUrl');
+        const preview = document.getElementById('imgPreview');
+        input?.addEventListener('change', (e) => {
+          const file = e.target.files?.[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            if (preview.tagName === 'IMG') {
+              preview.src = ev.target.result;
+            } else {
+              const img = document.createElement('img');
+              img.id = 'imgPreview';
+              img.src = ev.target.result;
+              img.alt = '';
+              img.className = 'w-24 h-24 object-cover rounded-sm border border-line';
+              preview.replaceWith(img);
+            }
+          };
+          reader.readAsDataURL(file);
+          // Clear URL field so the upload takes precedence.
+          if (urlField) urlField.value = '';
+        });
+      })();
+    </script>
 
     <label class="block md:col-span-2">
       <span class="text-xs text-gray-500">Description</span>

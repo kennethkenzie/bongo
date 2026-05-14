@@ -49,7 +49,10 @@ tailwind.config = {
         @endforeach
       </nav>
       <div class="mt-auto p-3 border-t border-line absolute bottom-0 w-60">
-        <div class="text-xs text-gray-500 mb-2">Signed in as <span class="font-semibold text-ink">{{ auth()->user()->name }}</span></div>
+        <div class="text-xs text-gray-500 mb-2">
+          Signed in as <span class="font-semibold text-ink">{{ auth()->user()->name }}</span>
+          <span class="ml-1 px-1.5 py-0.5 bg-brand-50 text-brand-700 rounded-sm text-[10px] uppercase tracking-wider">{{ auth()->user()->role }}</span>
+        </div>
         <form method="POST" action="{{ route('admin.logout') }}">
           @csrf
           <button class="w-full text-sm border border-line rounded-sm py-1.5 hover:bg-brand-50 hover:text-brand-700">Sign out</button>

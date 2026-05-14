@@ -8,8 +8,34 @@ cp .env.example .env
 php artisan key:generate
 touch database/database.sqlite   # or configure MySQL
 php artisan migrate --seed
+php artisan storage:link         # required for product image uploads
 php artisan serve
 ```
+
+## Admin console
+
+Visit `http://localhost:8000/admin`.
+
+Two seeded accounts (password `password`):
+
+| Email | Role | Access |
+|---|---|---|
+| `demo@estatebongo.com` | `admin` | Full /admin console |
+| `shopper@estatebongo.com` | `customer` | Storefront only — gets a 403 on /admin |
+
+Promote a user from tinker:
+
+```bash
+php artisan tinker
+> App\Models\User::where('email','x@x.com')->update(['role' => 'admin']);
+```
+
+### Product images
+
+The admin product form supports uploading a file from your computer
+(stored on the `public` disk under `products/`) **or** pasting a remote
+image URL. Run `php artisan storage:link` once so uploaded files are
+served at `/storage/products/...`.
 
 API runs at `http://localhost:8000/api/v1`.
 

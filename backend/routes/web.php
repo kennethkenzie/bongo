@@ -26,8 +26,8 @@ Route::middleware('guest')->group(function () {
     Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.attempt');
 });
 
-// Admin console (authenticated)
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+// Admin console (authenticated + admin role)
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
