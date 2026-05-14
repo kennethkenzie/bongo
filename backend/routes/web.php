@@ -73,5 +73,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
     Route::get('/roles', [AdminUserController::class, 'roles'])->name('roles.index');
     Route::get('/settings', [AdminSettingsController::class, 'index'])->name('settings.index');
+    Route::post('/settings/currency', [AdminSettingsController::class, 'storeCurrency'])->name('settings.currency.store');
+    Route::delete('/settings/currency/{currency}', [AdminSettingsController::class, 'destroyCurrency'])->name('settings.currency.destroy');
     Route::get('/settings/{section}', [AdminSettingsController::class, 'show'])->name('settings.show');
 });

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Currency;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class SettingsController extends Controller
 {
@@ -42,10 +43,10 @@ class SettingsController extends Controller
             ],
             'currency' => [
                 'label' => 'Currency',
-                'description' => 'Set default currency, exchange display, and money formatting.',
+                'description' => 'Add, delete, and manage marketplace currencies.',
                 'fields' => [
-                    ['Default currency', 'USD'],
-                    ['Secondary currency', 'TZS'],
+                    ['Default currency', 'Managed below'],
+                    ['Exchange rates', 'Relative to default currency'],
                     ['Price precision', '2 decimals'],
                 ],
             ],
@@ -137,7 +138,7 @@ class SettingsController extends Controller
                 ['Storefront URL', env('FRONTEND_URL', 'http://localhost:3000'), 'External customer-facing Next.js storefront.'],
                 ['API docs URL', url('/api/v1/home'), 'Primary API payload used by the storefront home page.'],
                 ['Admin access', 'Admin, Manager, Support', 'Roles that can enter the dashboard.'],
-                ['Currency', 'USD', 'Default currency used by seeded products and order totals.'],
+                ['Currency', 'Managed in Currency settings', 'Default and extra currencies are stored in the database.'],
                 ['Image uploads', 'public/products', 'Uploaded product images are stored on the public disk.'],
             ],
         ]);
@@ -154,6 +155,47 @@ class SettingsController extends Controller
             'slug' => $section,
             'section' => $sections[$section],
             'sections' => $sections,
+            'currencies' => $section === 'currency' ? Currency::orderByDesc('is_default')->orderBy('code')->get() : collect(),
         ]);
+    }
+
+    public function storeCurrency(Request $request)
+    {
+        abort_unless(auth()->user()->isAdmin(), 403);
+
+        $data = $request->validate([
+            'code' => ['required', 'string', 'size:3', Rule::unique('currencies', 'code')],
+            'name' => ['required', 'string', 'max:120'],
+            'symbol' => ['nullable', 'string', 'max:12'],
+            'exchange_rate' => ['required', 'numeric', 'min:0.000001'],
+            'is_default' => ['boolean'],
+            'is_active' => ['boolean'],
+        ]);
+
+        $data['code'] = strtoupper($data['code']);
+        $data['is_default'] = (bool) ($data['is_default'] ?? false);
+        $data['is_active'] = (bool) ($data['is_active'] ?? true);
+
+        if ($data['is_default']) {
+            Currency::query()->update(['is_default' => false]);
+        }
+
+        Currency::create($data);
+
+        return redirect()->route('admin.settings.show', 'currency')->with('status', 'Currency added.');
+    }
+
+    public function destroyCurrency(Currency $currency)
+    {
+        abort_unless(auth()->user()->isAdmin(), 403);
+
+        $wasDefault = $currency->is_default;
+        $currency->delete();
+
+        if ($wasDefault && Currency::exists()) {
+            Currency::orderBy('code')->first()?->update(['is_default' => true]);
+        }
+
+        return redirect()->route('admin.settings.show', 'currency')->with('status', 'Currency deleted.');
     }
 }
