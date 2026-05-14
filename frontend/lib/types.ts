@@ -13,11 +13,24 @@ export type Product = {
   category?: string;
 };
 
+export type CategoryGroup = {
+  title: string;
+  links: string[];
+};
+
+export type CategoryFeature = {
+  title: string;
+  image: string;
+  href?: string;
+};
+
 export type Category = {
   slug: string;
   name: string;
   icon?: string;
   image?: string;
+  groups?: CategoryGroup[];
+  featured?: CategoryFeature[];
 };
 
 export type PromoTile = {
