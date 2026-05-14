@@ -1,0 +1,7 @@
+@extends('admin.layout', ['title' => 'Attribute', 'subtitle' => 'Manage reusable product attributes like material, storage, model, or fit.'])
+@section('content')
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
+  <form class="bg-white rounded-sm border border-line p-5 shadow-admin text-sm h-fit"><h2 class="font-bold mb-3">Add attribute</h2><label class="block mb-3"><span class="text-xs text-gray-500">Attribute name</span><input disabled placeholder="Material / Storage / Model" class="mt-1 w-full border border-line rounded-sm px-3 py-2 bg-surface"></label><label class="block mb-3"><span class="text-xs text-gray-500">Values</span><textarea disabled rows="4" placeholder="Cotton, Leather, Metal" class="mt-1 w-full border border-line rounded-sm px-3 py-2 bg-surface"></textarea></label><button disabled class="bg-brand-600/50 text-white px-4 py-2 rounded-sm font-semibold cursor-not-allowed">Save attribute</button></form>
+  <div class="lg:col-span-2 bg-white rounded-sm border border-line overflow-hidden shadow-admin"><div class="px-4 py-3 border-b border-line"><h2 class="font-bold">Attributes</h2></div><table class="w-full text-sm"><thead class="bg-surface text-xs uppercase text-gray-500"><tr><th class="text-left px-4 py-2">Name</th><th class="text-left px-4 py-2">Values</th><th class="text-left px-4 py-2">Products</th></tr></thead><tbody><tr><td colspan="3" class="px-4 py-10 text-center text-gray-400">No attributes yet.</td></tr></tbody></table></div>
+</div>
+@endsection

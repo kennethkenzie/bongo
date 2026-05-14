@@ -32,18 +32,26 @@ class CatalogPageController extends Controller
     public function sellerProducts() { return $this->render('seller-products'); }
     public function bulkImport() { return $this->render('bulk-import'); }
     public function bulkExport() { return $this->render('bulk-export'); }
-    public function brands() { return $this->render('brands'); }
-    public function customLabels() { return $this->render('custom-labels'); }
-    public function attributes() { return $this->render('attributes'); }
-    public function colors() { return $this->render('colors'); }
-    public function sizeGuides() { return $this->render('size-guides'); }
-    public function warranties() { return $this->render('warranties'); }
-    public function smartBars() { return $this->render('smart-bars'); }
-    public function reviews() { return $this->render('reviews'); }
+    public function brands() { return $this->renderDedicated('brands', 'admin.catalog.brands'); }
+    public function customLabels() { return $this->renderDedicated('custom-labels', 'admin.catalog.custom_labels'); }
+    public function attributes() { return $this->renderDedicated('attributes', 'admin.catalog.attributes'); }
+    public function colors() { return $this->renderDedicated('colors', 'admin.catalog.colors'); }
+    public function sizeGuides() { return $this->renderDedicated('size-guides', 'admin.catalog.size_guides'); }
+    public function warranties() { return $this->renderDedicated('warranties', 'admin.catalog.warranties'); }
+    public function smartBars() { return $this->renderDedicated('smart-bars', 'admin.catalog.smart_bars'); }
+    public function reviews() { return $this->renderDedicated('reviews', 'admin.catalog.reviews'); }
 
     public function show(string $page)
     {
         return $this->render($page);
+    }
+
+    protected function renderDedicated(string $page, string $view)
+    {
+        $pages = self::pages();
+        abort_unless(isset($pages[$page]), 404);
+
+        return view($view, $this->payload($page, $pages));
     }
 
     protected function render(string $page)
@@ -51,13 +59,18 @@ class CatalogPageController extends Controller
         $pages = self::pages();
         abort_unless(isset($pages[$page]), 404);
 
+        return view('admin.catalog.page', $this->payload($page, $pages));
+    }
+
+    protected function payload(string $page, array $pages): array
+    {
         $products = Product::with('category')
             ->when($page === 'in-house-products', fn ($q) => $q->where('is_active', true))
             ->latest()
             ->limit(8)
             ->get();
 
-        return view('admin.catalog.page', [
+        return [
             'slug' => $page,
             'page' => $pages[$page],
             'pages' => $pages,
@@ -65,6 +78,6 @@ class CatalogPageController extends Controller
             'productCount' => Product::count(),
             'activeProductCount' => Product::where('is_active', true)->count(),
             'categoryCount' => Category::count(),
-        ]);
+        ];
     }
 }
