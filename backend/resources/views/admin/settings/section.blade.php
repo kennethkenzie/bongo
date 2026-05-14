@@ -34,9 +34,8 @@
     <div class="space-y-1 text-sm">
       @foreach($sections as $key => $item)
         <a href="{{ route('admin.settings.show', $key) }}"
-           class="flex items-center gap-2 px-3 py-2 rounded-sm {{ $slug === $key ? 'bg-brand-600 text-white' : 'text-gray-700 hover:bg-brand-50 hover:text-brand-700' }}">
-          <x-icon name="circle" :size="10" :stroke="2" />
-          <span>{{ $item['label'] }}</span>
+           class="block px-3 py-2 rounded-sm {{ $slug === $key ? 'bg-brand-600 text-white' : 'text-gray-700 hover:bg-brand-50 hover:text-brand-700' }}">
+          {{ $item['label'] }}
         </a>
       @endforeach
     </div>

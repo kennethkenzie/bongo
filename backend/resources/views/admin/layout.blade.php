@@ -130,8 +130,8 @@ tailwind.config = {
             @endphp
             @foreach($settingsLinks as $slug => $label)
               <a href="{{ route('admin.settings.show', $slug) }}"
-                 class="{{ $navLink }} py-1.5 text-xs {{ request()->routeIs('admin.settings.show') && request()->route('section') === $slug ? $childActive : $childIdle }}">
-                <x-icon name="circle" :size="10" :stroke="2" class="opacity-70" /> <span>{{ $label }}</span>
+                 class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.settings.show') && request()->route('section') === $slug ? $childActive : $childIdle }}">
+                {{ $label }}
               </a>
             @endforeach
             <a href="{{ route('admin.roles.index') }}" class="{{ $navLink }} py-1.5 {{ request()->routeIs('admin.roles.*') ? $childActive : $childIdle }}">
