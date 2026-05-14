@@ -17,7 +17,7 @@ export default function PromoStrip() {
         >
           <div className="text-xs font-semibold opacity-90">{title}</div>
           <div className="text-lg font-extrabold leading-tight">{subtitle}</div>
-          <Icon className="absolute right-2 bottom-1 opacity-90" size={36} strokeWidth={1.6} />
+          <Icon className="absolute right-2 bottom-1 opacity-25" size={48} strokeWidth={1.6} />
           <button className="mt-2 text-[11px] bg-white/95 text-brand-700 px-2 py-1 rounded-sm font-semibold">
             Shop now →
           </button>
