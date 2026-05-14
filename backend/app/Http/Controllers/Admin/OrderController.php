@@ -28,6 +28,30 @@ class OrderController extends Controller
         return view('admin.orders.index', compact('orders', 'statuses'));
     }
 
+
+    public function inhouse()
+    {
+        return $this->segment('Inhouse orders', 'Orders fulfilled directly by Estate Bongo Online warehouses.', 'inhouse');
+    }
+
+    public function seller()
+    {
+        return $this->segment('Seller Orders', 'Orders assigned to marketplace sellers for fulfillment.', 'seller');
+    }
+
+    public function pickupPoint()
+    {
+        return $this->segment('Pickup Point Orders', 'Orders customers will collect from pickup points.', 'pickup-point');
+    }
+
+    protected function segment(string $title, string $subtitle, string $type)
+    {
+        $orders = Order::with(['user', 'items'])->latest()->paginate(20);
+        $statuses = self::STATUSES;
+
+        return view('admin.orders.segment', compact('orders', 'statuses', 'title', 'subtitle', 'type'));
+    }
+
     public function updateStatus(Request $request, Order $order)
     {
         $data = $request->validate([

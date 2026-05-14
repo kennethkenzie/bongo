@@ -89,12 +89,10 @@ tailwind.config = {
             <x-icon name="chevron-down" :size="14" class="transition group-open:rotate-180" />
           </summary>
           <div class="ml-4 mt-1 pl-3 border-l border-line space-y-1">
-            <a href="{{ route('admin.orders.index') }}" class="{{ $navLink }} py-1.5 {{ request()->routeIs('admin.orders.*') ? $childActive : $childIdle }}">
-              <x-icon name="receipt" :size="15" /> Orders
-            </a>
-            <a href="{{ route('admin.orders.index', ['status' => 'pending']) }}" class="{{ $navLink }} py-1.5 {{ request('status') === 'pending' ? $childActive : $childIdle }}">
-              <x-icon name="bell" :size="15" /> Pending queue
-            </a>
+            <a href="{{ route('admin.orders.index') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.orders.index') && !request()->query() ? $childActive : $childIdle }}">All Orders</a>
+            <a href="{{ route('admin.orders.inhouse') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.orders.inhouse') ? $childActive : $childIdle }}">Inhouse orders</a>
+            <a href="{{ route('admin.orders.seller') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.orders.seller') ? $childActive : $childIdle }}">Seller Orders</a>
+            <a href="{{ route('admin.orders.pickup') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.orders.pickup') ? $childActive : $childIdle }}">Pickup Point Orders</a>
           </div>
         </details>
 

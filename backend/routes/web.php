@@ -57,6 +57,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('/categories/{category}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
 
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/inhouse', [AdminOrderController::class, 'inhouse'])->name('orders.inhouse');
+    Route::get('/orders/seller', [AdminOrderController::class, 'seller'])->name('orders.seller');
+    Route::get('/orders/pickup-point', [AdminOrderController::class, 'pickupPoint'])->name('orders.pickup');
     Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
 
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
