@@ -18,9 +18,13 @@ export default async function ProductPage({ params }: { params: { id: string } }
       <nav className="text-xs text-ink-muted flex items-center gap-1 mb-3">
         <Link href="/" className="hover:text-brand-700">Home</Link>
         <ChevronRight size={12} />
-        <Link href={`/category/${product.category}`} className="hover:text-brand-700 capitalize">
-          {product.category?.replace(/-/g, " ")}
-        </Link>
+        {product.category ? (
+          <Link href={`/category/${product.category}`} className="hover:text-brand-700 capitalize">
+            {product.categoryName ?? product.category.replace(/-/g, " ")}
+          </Link>
+        ) : (
+          <span>Product</span>
+        )}
         <ChevronRight size={12} />
         <span className="text-ink line-clamp-1">{product.title}</span>
       </nav>

@@ -11,6 +11,7 @@ export type Product = {
   freeShipping?: boolean;
   badge?: string;
   category?: string;
+  categoryName?: string;
 };
 
 export type CategoryGroup = {

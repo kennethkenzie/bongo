@@ -18,16 +18,20 @@ async function safe<T>(url: string, fallback: T): Promise<T> {
   }
 }
 
-type ApiProduct = Omit<Product, "id" | "price" | "rating"> & {
+type ApiProduct = Omit<Product, "id" | "price" | "rating" | "category"> & {
   id: string | number;
   price: string | number;
   rating: string | number;
   original_price?: string | number | null;
   free_shipping?: boolean | null;
+  category?: string | Category | null;
 };
 
 function normalizeProduct(product: ApiProduct): Product {
   const originalPrice = product.originalPrice ?? product.original_price;
+  const apiCategory = product.category;
+  const category = typeof apiCategory === "object" && apiCategory !== null ? apiCategory.slug : apiCategory;
+  const categoryName = typeof apiCategory === "object" && apiCategory !== null ? apiCategory.name : undefined;
 
   return {
     ...product,
@@ -36,6 +40,8 @@ function normalizeProduct(product: ApiProduct): Product {
     originalPrice: originalPrice == null ? undefined : Number(originalPrice),
     rating: Number(product.rating),
     freeShipping: product.freeShipping ?? product.free_shipping ?? false,
+    category: category ?? undefined,
+    categoryName,
   };
 }
 
