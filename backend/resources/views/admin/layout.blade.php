@@ -33,18 +33,20 @@ tailwind.config = {
       <nav class="p-3 space-y-1 text-sm">
         @php
           $items = [
-            ['admin.dashboard',   '📊 Dashboard'],
-            ['admin.products.index', '📦 Products'],
-            ['admin.categories.index', '🏷️ Categories'],
-            ['admin.orders.index', '🧾 Orders'],
-            ['admin.users.index', '👥 Users'],
+            ['admin.dashboard',         'Dashboard',  'dashboard'],
+            ['admin.products.index',    'Products',   'cube'],
+            ['admin.categories.index',  'Categories', 'tag'],
+            ['admin.orders.index',      'Orders',     'receipt'],
+            ['admin.users.index',       'Users',      'users'],
           ];
         @endphp
-        @foreach ($items as [$route, $label])
+        @foreach ($items as [$route, $label, $icon])
+          @php $active = request()->routeIs($route.'*') || request()->routeIs($route); @endphp
           <a href="{{ route($route) }}"
-             class="block px-3 py-2 rounded-sm hover:bg-brand-50 hover:text-brand-700 transition
-                    {{ request()->routeIs($route.'*') || request()->routeIs($route) ? 'bg-brand-600 text-white hover:bg-brand-600 hover:text-white' : 'text-gray-700' }}">
-            {{ $label }}
+             class="flex items-center gap-2.5 px-3 py-2 rounded-sm transition
+                    {{ $active ? 'bg-brand-600 text-white' : 'text-gray-700 hover:bg-brand-50 hover:text-brand-700' }}">
+            <x-icon :name="$icon" :size="17" />
+            <span>{{ $label }}</span>
           </a>
         @endforeach
       </nav>
@@ -55,7 +57,9 @@ tailwind.config = {
         </div>
         <form method="POST" action="{{ route('admin.logout') }}">
           @csrf
-          <button class="w-full text-sm border border-line rounded-sm py-1.5 hover:bg-brand-50 hover:text-brand-700">Sign out</button>
+          <button class="w-full inline-flex items-center justify-center gap-2 text-sm border border-line rounded-sm py-1.5 hover:bg-brand-50 hover:text-brand-700">
+            <x-icon name="logout" :size="14" /> Sign out
+          </button>
         </form>
       </div>
     </aside>
@@ -67,7 +71,9 @@ tailwind.config = {
           @if (!empty($subtitle))<p class="text-xs text-gray-500">{{ $subtitle }}</p>@endif
         </div>
         <div class="flex items-center gap-2 text-sm">
-          <a href="{{ url('/') }}" target="_blank" class="text-brand-700 hover:underline">View site →</a>
+          <a href="{{ url('/') }}" target="_blank" class="text-brand-700 hover:underline inline-flex items-center gap-1">
+            View site <x-icon name="external-link" :size="13" />
+          </a>
         </div>
       </header>
 

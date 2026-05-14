@@ -34,7 +34,9 @@
       <label class="flex items-center gap-2 text-xs text-gray-600">
         <input type="checkbox" name="remember" checked class="accent-brand-600"> Remember me
       </label>
-      <button class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-2 rounded-sm">Sign In</button>
+      <button class="w-full inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold py-2 rounded-sm">
+        <x-icon name="lock" :size="15" /> Sign In
+      </button>
     </form>
     <div class="text-[11px] text-gray-400 text-center mt-4">
       Demo credentials: <code class="font-mono">demo@estatebongo.com</code> / <code class="font-mono">password</code>

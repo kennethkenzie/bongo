@@ -4,20 +4,22 @@
 <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
   @php
     $stats = [
-      ['Products', $productCount,  '📦', 'bg-brand-600'],
-      ['Categories', $categoryCount, '🏷️', 'bg-emerald-600'],
-      ['Orders', $orderCount, '🧾', 'bg-amber-600'],
-      ['Users', $userCount, '👥', 'bg-rose-600'],
+      ['Products',   $productCount,  'cube',    'bg-brand-600'],
+      ['Categories', $categoryCount, 'tag',     'bg-emerald-600'],
+      ['Orders',     $orderCount,    'receipt', 'bg-amber-600'],
+      ['Users',      $userCount,     'users',   'bg-rose-600'],
     ];
   @endphp
-  @foreach ($stats as [$label, $value, $emoji, $bg])
+  @foreach ($stats as [$label, $value, $icon, $bg])
     <div class="bg-white rounded-sm border border-line p-4">
       <div class="flex items-center justify-between">
         <div>
           <div class="text-xs text-gray-500">{{ $label }}</div>
           <div class="text-2xl font-extrabold">{{ number_format($value) }}</div>
         </div>
-        <div class="w-10 h-10 grid place-items-center {{ $bg }} text-white rounded-sm">{{ $emoji }}</div>
+        <div class="w-10 h-10 grid place-items-center {{ $bg }} text-white rounded-sm">
+          <x-icon :name="$icon" :size="20" />
+        </div>
       </div>
     </div>
   @endforeach
@@ -27,7 +29,9 @@
   <div class="lg:col-span-2 bg-white rounded-sm border border-line">
     <div class="px-4 py-3 border-b border-line flex items-center justify-between">
       <h2 class="font-bold">Recent Orders</h2>
-      <a href="{{ route('admin.orders.index') }}" class="text-brand-700 text-sm hover:underline">View all →</a>
+      <a href="{{ route('admin.orders.index') }}" class="text-brand-700 text-sm hover:underline inline-flex items-center gap-1">
+        View all <x-icon name="arrow-right" :size="13" />
+      </a>
     </div>
     <div class="overflow-x-auto">
       <table class="w-full text-sm">

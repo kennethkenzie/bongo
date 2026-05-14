@@ -54,7 +54,7 @@ export default async function HomePage() {
       <ProductGrid products={recommended} />
 
       {/* Trending */}
-      <SectionHeader title="Trending Now" accent="🔥 Hot" href="#" />
+      <SectionHeader title="Trending Now" accent="Hot picks" href="#" />
       <HorizontalRail products={trending} />
 
       {/* More to love */}

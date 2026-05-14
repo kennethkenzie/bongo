@@ -2,7 +2,9 @@
 @section('content')
 <div class="flex items-center justify-end mb-3">
   <button onclick="document.getElementById('newCat').classList.toggle('hidden')"
-    class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-sm text-sm font-semibold">+ New category</button>
+    class="inline-flex items-center gap-1 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-sm text-sm font-semibold">
+    <x-icon name="plus" :size="14" /> New category
+  </button>
 </div>
 
 <form id="newCat" method="POST" action="{{ route('admin.categories.store') }}"
@@ -33,11 +35,21 @@
           </td>
           <td class="px-4 py-2 font-mono text-xs text-gray-500">{{ $c->slug }}</td>
           <td class="px-4 py-2">{{ $c->products_count }}</td>
-          <td class="px-4 py-2">{{ $c->is_active ? '✅' : '—' }}</td>
+          <td class="px-4 py-2">
+            @if ($c->is_active)
+              <span class="text-emerald-600 inline-flex items-center gap-1">
+                <x-icon name="check-circle" :size="14" /> Active
+              </span>
+            @else
+              <span class="text-gray-400">—</span>
+            @endif
+          </td>
           <td class="px-4 py-2 text-right">
             <form method="POST" action="{{ route('admin.categories.destroy', $c) }}" onsubmit="return confirm('Delete this category?')" class="inline">
               @csrf @method('DELETE')
-              <button class="text-red-600 hover:underline text-sm">Delete</button>
+              <button class="text-red-600 hover:underline text-sm inline-flex items-center gap-1">
+                <x-icon name="trash" :size="13" /> Delete
+              </button>
             </form>
           </td>
         </tr>

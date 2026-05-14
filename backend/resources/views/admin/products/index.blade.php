@@ -3,11 +3,21 @@
 @section('content')
 <div class="flex items-center justify-between mb-3">
   <form method="GET" class="flex items-center gap-2">
-    <input name="q" value="{{ request('q') }}" placeholder="Search products…"
-      class="border border-line rounded-sm px-3 py-2 text-sm focus:outline-none focus:border-brand-600 w-64">
-    <button class="bg-brand-600 hover:bg-brand-700 text-white px-3 py-2 rounded-sm text-sm">Search</button>
+    <div class="relative">
+      <span class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">
+        <x-icon name="search" :size="15" />
+      </span>
+      <input name="q" value="{{ request('q') }}" placeholder="Search products…"
+        class="border border-line rounded-sm pl-8 pr-3 py-2 text-sm focus:outline-none focus:border-brand-600 w-72">
+    </div>
+    <button class="inline-flex items-center gap-1 bg-brand-600 hover:bg-brand-700 text-white px-3 py-2 rounded-sm text-sm">
+      <x-icon name="search" :size="14" /> Search
+    </button>
   </form>
-  <a href="{{ route('admin.products.create') }}" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-sm text-sm font-semibold">+ New product</a>
+  <a href="{{ route('admin.products.create') }}"
+     class="inline-flex items-center gap-1 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-sm text-sm font-semibold">
+    <x-icon name="plus" :size="14" /> New product
+  </a>
 </div>
 
 <div class="bg-white rounded-sm border border-line overflow-hidden">
@@ -45,10 +55,15 @@
             @endif
           </td>
           <td class="px-4 py-2 text-right whitespace-nowrap">
-            <a href="{{ route('admin.products.edit', $p) }}" class="text-brand-700 hover:underline">Edit</a>
+            <a href="{{ route('admin.products.edit', $p) }}"
+               class="text-brand-700 hover:underline inline-flex items-center gap-1">
+              <x-icon name="edit" :size="13" /> Edit
+            </a>
             <form method="POST" action="{{ route('admin.products.destroy', $p) }}" class="inline ml-2" onsubmit="return confirm('Delete this product?')">
               @csrf @method('DELETE')
-              <button class="text-red-600 hover:underline">Delete</button>
+              <button class="text-red-600 hover:underline inline-flex items-center gap-1">
+                <x-icon name="trash" :size="13" /> Delete
+              </button>
             </form>
           </td>
         </tr>
