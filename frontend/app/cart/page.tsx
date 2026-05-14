@@ -5,6 +5,7 @@ import SectionHeader from "@/components/home/SectionHeader";
 import { Trash2, Minus, Plus, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
+
 const cartItems = flashDeals.slice(0, 5).map((p, i) => ({ ...p, qty: i + 1 }));
 
 export default function CartPage() {
@@ -53,7 +54,7 @@ export default function CartPage() {
               <div className="border-t border-line my-2" />
               <div className="flex justify-between font-bold text-base"><span>Total</span><span className="text-deal">{formatPrice(subtotal + shipping - 2.5)}</span></div>
             </div>
-            <button className="btn-brand w-full mt-3">Proceed to Checkout</button>
+            <Link href="/checkout" className="btn-brand w-full mt-3">Proceed to Checkout</Link>
             <div className="text-[11px] text-ink-muted flex items-center gap-1 justify-center mt-2">
               <ShieldCheck size={12} /> Secure checkout · Buyer Protection
             </div>

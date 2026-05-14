@@ -2,6 +2,7 @@ import { flashDeals, recommended, moreToLove, trending } from "@/lib/data";
 import { formatPrice, compactNumber } from "@/lib/utils";
 import ProductGrid from "@/components/product/ProductGrid";
 import SectionHeader from "@/components/home/SectionHeader";
+import Reviews from "@/components/product/Reviews";
 import { Heart, ShoppingCart, Star, Truck, ShieldCheck, RotateCcw, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -92,6 +93,8 @@ export default function ProductPage({ params }: { params: { id: string } }) {
           </div>
         </div>
       </div>
+
+      <Reviews rating={product.rating} sold={product.sold} />
 
       <SectionHeader title="You may also like" href="#" />
       <ProductGrid products={recommended} cols="dense" compact />
