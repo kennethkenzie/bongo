@@ -34,9 +34,23 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
+    Route::get('/catalog/in-house-products', [AdminCatalogPageController::class, 'inHouseProducts'])->name('catalog.in_house');
+    Route::get('/catalog/digital-products', [AdminCatalogPageController::class, 'digitalProducts'])->name('catalog.digital');
+    Route::get('/catalog/seller-products', [AdminCatalogPageController::class, 'sellerProducts'])->name('catalog.seller');
+    Route::get('/catalog/bulk-import', [AdminCatalogPageController::class, 'bulkImport'])->name('catalog.import');
+    Route::get('/catalog/bulk-export', [AdminCatalogPageController::class, 'bulkExport'])->name('catalog.export');
+    Route::get('/catalog/brands', [AdminCatalogPageController::class, 'brands'])->name('catalog.brands');
+    Route::get('/catalog/custom-labels', [AdminCatalogPageController::class, 'customLabels'])->name('catalog.labels');
+    Route::get('/catalog/attributes', [AdminCatalogPageController::class, 'attributes'])->name('catalog.attributes');
+    Route::get('/catalog/colors', [AdminCatalogPageController::class, 'colors'])->name('catalog.colors');
+    Route::get('/catalog/size-guides', [AdminCatalogPageController::class, 'sizeGuides'])->name('catalog.size_guides');
+    Route::get('/catalog/warranties', [AdminCatalogPageController::class, 'warranties'])->name('catalog.warranties');
+    Route::get('/catalog/smart-bars', [AdminCatalogPageController::class, 'smartBars'])->name('catalog.smart_bars');
+    Route::get('/catalog/reviews', [AdminCatalogPageController::class, 'reviews'])->name('catalog.reviews');
+    Route::get('/catalog/{page}', [AdminCatalogPageController::class, 'show'])->name('catalog.show');
+
     Route::resource('products', AdminProductController::class)
         ->except(['show']);
-    Route::get('/catalog/{page}', [AdminCatalogPageController::class, 'show'])->name('catalog.show');
 
     Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
     Route::post('/categories', [AdminCategoryController::class, 'store'])->name('categories.store');
