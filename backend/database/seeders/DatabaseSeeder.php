@@ -22,6 +22,26 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        // Store manager (can operate catalog/orders, but cannot edit roles)
+        User::updateOrCreate(
+            ['email' => 'manager@estatebongo.com'],
+            [
+                'name'     => 'Store Manager',
+                'password' => 'password',
+                'role'     => User::ROLE_MANAGER,
+            ]
+        );
+
+        // Customer support (can access the dashboard and orders queue)
+        User::updateOrCreate(
+            ['email' => 'support@estatebongo.com'],
+            [
+                'name'     => 'Support Agent',
+                'password' => 'password',
+                'role'     => User::ROLE_SUPPORT,
+            ]
+        );
+
         // Regular customer (can shop, cannot access /admin)
         User::updateOrCreate(
             ['email' => 'shopper@estatebongo.com'],

@@ -13,12 +13,19 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $q = Product::with('category');
-        if ($request->filled('q')) {
-            $q->where('title', 'like', '%'.$request->q.'%');
-        }
-        $products = $q->latest()->paginate(20);
-        return view('admin.products.index', compact('products'));
+        $query = Product::with('category')
+            ->when($request->filled('q'), fn ($q) => $q->where('title', 'like', '%'.$request->q.'%'))
+            ->when($request->filled('category_id'), fn ($q) => $q->where('category_id', $request->category_id))
+            ->when($request->filled('status'), function ($q) use ($request) {
+                if ($request->status === 'active') $q->where('is_active', true);
+                if ($request->status === 'inactive') $q->where('is_active', false);
+                if ($request->status === 'low_stock') $q->where('stock', '<=', 15);
+            });
+
+        $products = $query->latest()->paginate(20);
+        $categories = Category::orderBy('name')->get();
+
+        return view('admin.products.index', compact('products', 'categories'));
     }
 
     public function create()
