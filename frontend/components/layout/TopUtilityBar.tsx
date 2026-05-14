@@ -1,7 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { Globe, ChevronDown, Smartphone, HelpCircle } from "lucide-react";
+import { useCurrency } from "@/components/CurrencyProvider";
 
 export default function TopUtilityBar() {
+  const currency = useCurrency();
   return (
     <div className="bg-white border-b border-line text-xs text-ink-soft">
       <div className="container-x flex items-center justify-between h-8">
@@ -23,7 +27,7 @@ export default function TopUtilityBar() {
           </Link>
           <span className="text-line">|</span>
           <button className="hover:text-brand-700 flex items-center gap-1">
-            <Globe size={12} /> English / USD <ChevronDown size={12} />
+            <Globe size={12} /> English / {currency.code} <ChevronDown size={12} />
           </button>
         </div>
       </div>

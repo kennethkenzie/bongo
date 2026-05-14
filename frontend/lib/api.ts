@@ -1,5 +1,5 @@
 import * as mock from "./data";
-import type { Product, Category } from "./types";
+import type { Product, Category, Currency } from "./types";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 const USE_MOCK = (process.env.NEXT_PUBLIC_USE_MOCK ?? "true") === "true";
@@ -19,6 +19,9 @@ async function safe<T>(url: string, fallback: T): Promise<T> {
 }
 
 export const api = {
+  currency: () =>
+    safe<Currency>(`${API}/settings/currency`, { code: "USD", name: "US Dollar", symbol: "$", exchange_rate: 1, is_default: true, is_active: true }),
+
   home: () =>
     safe<{
       categories: Category[];

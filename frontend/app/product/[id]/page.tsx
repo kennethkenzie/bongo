@@ -11,7 +11,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
-  const product = await api.product(params.id);
+  const [product, currency] = await Promise.all([api.product(params.id), api.currency()]);
   if (!product) return notFound();
   return (
     <div>
@@ -54,9 +54,9 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
           <div className="bg-surface p-3 rounded-sm border border-line">
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-extrabold text-deal">{formatPrice(product.price)}</span>
+              <span className="text-2xl font-extrabold text-deal">{formatPrice(product.price, currency)}</span>
               {product.originalPrice ? (
-                <span className="text-sm text-ink-muted line-through">{formatPrice(product.originalPrice)}</span>
+                <span className="text-sm text-ink-muted line-through">{formatPrice(product.originalPrice, currency)}</span>
               ) : null}
               {product.discount ? <span className="badge-deal">-{product.discount}%</span> : null}
             </div>

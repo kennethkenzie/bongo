@@ -5,9 +5,11 @@ import { Heart, ShoppingCart, Star, Truck } from "lucide-react";
 import type { Product } from "@/lib/types";
 import { compactNumber, formatPrice } from "@/lib/utils";
 import { useState } from "react";
+import { useCurrency } from "@/components/CurrencyProvider";
 
 export default function ProductCard({ product, compact = false }: { product: Product; compact?: boolean }) {
   const [wished, setWished] = useState(false);
+  const currency = useCurrency();
   return (
     <div className="group card overflow-hidden hover:shadow-pop hover:border-brand-300 transition relative">
       <Link href={`/product/${product.id}`} className="block">
@@ -46,8 +48,8 @@ export default function ProductCard({ product, compact = false }: { product: Pro
         </Link>
 
         <div className="mt-1 flex items-baseline gap-1.5">
-          <span className="price text-sm">{formatPrice(product.price)}</span>
-          {product.originalPrice ? <span className="price-strike">{formatPrice(product.originalPrice)}</span> : null}
+          <span className="price text-sm">{formatPrice(product.price, currency)}</span>
+          {product.originalPrice ? <span className="price-strike">{formatPrice(product.originalPrice, currency)}</span> : null}
         </div>
 
         <div className="mt-1 flex items-center gap-1 text-[11px] text-ink-muted">

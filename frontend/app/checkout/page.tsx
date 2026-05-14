@@ -4,6 +4,7 @@ import { formatPrice } from "@/lib/utils";
 import { ShieldCheck, Truck, CreditCard, Wallet, Smartphone, Building2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { useCurrency } from "@/components/CurrencyProvider";
 
 const items = flashDeals.slice(0, 3).map((p, i) => ({ ...p, qty: i + 1 }));
 
@@ -16,6 +17,7 @@ const payMethods = [
 
 export default function CheckoutPage() {
   const [pay, setPay] = useState("card");
+  const currency = useCurrency();
   const subtotal = items.reduce((s, p) => s + p.price * p.qty, 0);
   const shipping = subtotal > 50 ? 0 : 4.99;
   const tax = +(subtotal * 0.08).toFixed(2);
@@ -61,7 +63,7 @@ export default function CheckoutPage() {
                     <div className="font-medium">{s.label}</div>
                     <div className="text-xs text-ink-muted">Estimated arrival: {s.eta}</div>
                   </div>
-                  <div className="font-semibold">{s.price === 0 ? "FREE" : formatPrice(s.price)}</div>
+                  <div className="font-semibold">{s.price === 0 ? "FREE" : formatPrice(s.price, currency)}</div>
                 </label>
               ))}
             </div>
@@ -109,7 +111,7 @@ export default function CheckoutPage() {
                     <div className="line-clamp-2">{p.title}</div>
                     <div className="text-xs text-ink-muted">Qty: {p.qty}</div>
                   </div>
-                  <div className="text-sm price">{formatPrice(p.price * p.qty)}</div>
+                  <div className="text-sm price">{formatPrice(p.price * p.qty, currency)}</div>
                 </div>
               ))}
             </div>
@@ -121,12 +123,12 @@ export default function CheckoutPage() {
           <div className="card p-4 lg:sticky lg:top-24">
             <h3 className="font-bold mb-3">Order Summary</h3>
             <div className="space-y-1.5 text-sm">
-              <div className="flex justify-between"><span className="text-ink-muted">Subtotal</span><span>{formatPrice(subtotal)}</span></div>
-              <div className="flex justify-between"><span className="text-ink-muted">Shipping</span><span>{shipping === 0 ? "FREE" : formatPrice(shipping)}</span></div>
-              <div className="flex justify-between"><span className="text-ink-muted">Estimated Tax</span><span>{formatPrice(tax)}</span></div>
-              <div className="flex justify-between"><span className="text-ink-muted">Coupon</span><span className="text-brand-700">- {formatPrice(2.5)}</span></div>
+              <div className="flex justify-between"><span className="text-ink-muted">Subtotal</span><span>{formatPrice(subtotal, currency)}</span></div>
+              <div className="flex justify-between"><span className="text-ink-muted">Shipping</span><span>{shipping === 0 ? "FREE" : formatPrice(shipping, currency)}</span></div>
+              <div className="flex justify-between"><span className="text-ink-muted">Estimated Tax</span><span>{formatPrice(tax, currency)}</span></div>
+              <div className="flex justify-between"><span className="text-ink-muted">Coupon</span><span className="text-brand-700">- {formatPrice(2.5, currency)}</span></div>
               <div className="border-t border-line my-2" />
-              <div className="flex justify-between font-bold text-base"><span>Total</span><span className="text-deal">{formatPrice(total)}</span></div>
+              <div className="flex justify-between font-bold text-base"><span>Total</span><span className="text-deal">{formatPrice(total, currency)}</span></div>
             </div>
             <Link href="/checkout/success" className="btn-brand w-full mt-3">Place Order</Link>
             <div className="text-[11px] text-ink-muted flex items-center gap-1 justify-center mt-2">

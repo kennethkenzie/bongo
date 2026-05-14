@@ -1,4 +1,5 @@
 import { flashDeals, recommended } from "@/lib/data";
+import { api } from "@/lib/api";
 import { formatPrice } from "@/lib/utils";
 import ProductGrid from "@/components/product/ProductGrid";
 import SectionHeader from "@/components/home/SectionHeader";
@@ -8,7 +9,8 @@ import Link from "next/link";
 
 const cartItems = flashDeals.slice(0, 5).map((p, i) => ({ ...p, qty: i + 1 }));
 
-export default function CartPage() {
+export default async function CartPage() {
+  const currency = await api.currency();
   const subtotal = cartItems.reduce((s, p) => s + p.price * p.qty, 0);
   const shipping = subtotal > 50 ? 0 : 4.99;
   return (
@@ -36,8 +38,8 @@ export default function CartPage() {
                     <button className="w-7 h-7 grid place-items-center hover:bg-surface"><Plus size={12} /></button>
                   </div>
                   <div className="text-right">
-                    <div className="price">{formatPrice(p.price * p.qty)}</div>
-                    <div className="text-[11px] text-ink-muted">{formatPrice(p.price)} each</div>
+                    <div className="price">{formatPrice(p.price * p.qty, currency)}</div>
+                    <div className="text-[11px] text-ink-muted">{formatPrice(p.price, currency)} each</div>
                   </div>
                 </div>
               </div>
@@ -48,11 +50,11 @@ export default function CartPage() {
           <div className="card p-4">
             <h3 className="font-bold mb-3">Order Summary</h3>
             <div className="space-y-1.5 text-sm">
-              <div className="flex justify-between"><span className="text-ink-muted">Subtotal</span><span>{formatPrice(subtotal)}</span></div>
-              <div className="flex justify-between"><span className="text-ink-muted">Shipping</span><span>{shipping === 0 ? "FREE" : formatPrice(shipping)}</span></div>
-              <div className="flex justify-between"><span className="text-ink-muted">Coupon</span><span className="text-brand-700">- {formatPrice(2.50)}</span></div>
+              <div className="flex justify-between"><span className="text-ink-muted">Subtotal</span><span>{formatPrice(subtotal, currency)}</span></div>
+              <div className="flex justify-between"><span className="text-ink-muted">Shipping</span><span>{shipping === 0 ? "FREE" : formatPrice(shipping, currency)}</span></div>
+              <div className="flex justify-between"><span className="text-ink-muted">Coupon</span><span className="text-brand-700">- {formatPrice(2.50, currency)}</span></div>
               <div className="border-t border-line my-2" />
-              <div className="flex justify-between font-bold text-base"><span>Total</span><span className="text-deal">{formatPrice(subtotal + shipping - 2.5)}</span></div>
+              <div className="flex justify-between font-bold text-base"><span>Total</span><span className="text-deal">{formatPrice(subtotal + shipping - 2.5, currency)}</span></div>
             </div>
             <Link href="/checkout" className="btn-brand w-full mt-3">Proceed to Checkout</Link>
             <div className="text-[11px] text-ink-muted flex items-center gap-1 justify-center mt-2">

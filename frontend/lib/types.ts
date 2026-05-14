@@ -41,3 +41,12 @@ export type PromoTile = {
   href?: string;
   bg?: string;
 };
+
+export type Currency = {
+  code: string;
+  name?: string;
+  symbol?: string | null;
+  exchange_rate?: number | string;
+  is_default?: boolean;
+  is_active?: boolean;
+};

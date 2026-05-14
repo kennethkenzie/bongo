@@ -8,10 +8,12 @@ use App\Http\Controllers\Api\WishlistController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\HomeController;
+use App\Http\Controllers\Api\SettingsController;
 
 Route::prefix('v1')->group(function () {
     // Public storefront
     Route::get('/home', [HomeController::class, 'index']);
+    Route::get('/settings/currency', [SettingsController::class, 'currency']);
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/categories/{slug}', [CategoryController::class, 'show']);
 
