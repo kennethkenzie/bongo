@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Search, ShoppingCart, Heart, User, Camera, Menu } from "lucide-react";
 import { useState } from "react";
 
@@ -7,6 +8,11 @@ const trending = ["headphones", "summer dress", "smart watch", "air fryer", "led
 
 export default function Header() {
   const [q, setQ] = useState("");
+  const router = useRouter();
+  function submit(e: React.FormEvent) {
+    e.preventDefault();
+    if (q.trim()) router.push(`/search?q=${encodeURIComponent(q.trim())}`);
+  }
   return (
     <header className="bg-white border-b border-line sticky top-0 z-40">
       <div className="container-x flex items-center gap-3 md:gap-6 py-3">
@@ -30,21 +36,21 @@ export default function Header() {
 
         {/* Search */}
         <div className="flex-1 max-w-3xl">
-          <div className="flex items-stretch border-2 border-brand-600 rounded-sm bg-white">
+          <form onSubmit={submit} className="flex items-stretch border-2 border-brand-600 rounded-sm bg-white">
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search for products, brands and categories"
               className="flex-1 px-3 py-2 text-sm outline-none bg-transparent placeholder:text-ink-muted"
             />
-            <button className="hidden sm:flex items-center px-2 text-ink-muted hover:text-brand-700" aria-label="Search by image">
+            <button type="button" className="hidden sm:flex items-center px-2 text-ink-muted hover:text-brand-700" aria-label="Search by image">
               <Camera size={18} />
             </button>
-            <button className="bg-brand-600 hover:bg-brand-700 text-white px-3 sm:px-5 flex items-center gap-2">
+            <button type="submit" className="bg-brand-600 hover:bg-brand-700 text-white px-3 sm:px-5 flex items-center gap-2">
               <Search size={18} />
               <span className="hidden sm:inline text-sm font-medium">Search</span>
             </button>
-          </div>
+          </form>
           <div className="hidden md:flex items-center gap-3 mt-1.5 text-[11px] text-ink-muted">
             <span>Trending:</span>
             {trending.map((t) => (

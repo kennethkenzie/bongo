@@ -13,6 +13,8 @@ export default function TopUtilityBar() {
           <span>Welcome to Estate Bongo Online</span>
         </div>
         <div className="flex items-center gap-4">
+          <Link href="/login" className="hover:text-brand-700">Sign In</Link>
+          <Link href="/register" className="hover:text-brand-700">Register</Link>
           <Link href="/account" className="hover:text-brand-700">Account</Link>
           <Link href="/account/orders" className="hover:text-brand-700">My Orders</Link>
           <Link href="/wishlist" className="hover:text-brand-700">Wishlist</Link>

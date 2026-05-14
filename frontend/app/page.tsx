@@ -7,10 +7,14 @@ import SectionHeader from "@/components/home/SectionHeader";
 import TopCategories from "@/components/home/TopCategories";
 import HorizontalRail from "@/components/home/HorizontalRail";
 import ProductGrid from "@/components/product/ProductGrid";
-import { recommended, trending, moreToLove, topCategoryShortcuts } from "@/lib/data";
+import { topCategoryShortcuts } from "@/lib/data";
+import { api } from "@/lib/api";
 import Link from "next/link";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const data = await api.home();
+  const { recommended, trending, more_to_love: moreToLove } = data;
+
   return (
     <div className="space-y-2">
       {/* Mobile category shortcuts row */}

@@ -1,12 +1,14 @@
-import { categories, moreToLove } from "@/lib/data";
+import { api } from "@/lib/api";
 import ProductGrid from "@/components/product/ProductGrid";
 import SectionHeader from "@/components/home/SectionHeader";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight, SlidersHorizontal } from "lucide-react";
 
-export default function CategoryPage({ params }: { params: { slug: string } }) {
-  const cat = categories.find((c) => c.slug === params.slug);
+export default async function CategoryPage({ params }: { params: { slug: string } }) {
+  const data = await api.category(params.slug);
+  const cat = data.category;
+  const products = data.products.data;
   if (!cat) return notFound();
   return (
     <div>
@@ -30,7 +32,7 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
       </div>
 
       <SectionHeader title={`Top picks in ${cat.name}`} href="#" />
-      <ProductGrid products={moreToLove} cols="dense" compact />
+      <ProductGrid products={products} cols="dense" compact />
     </div>
   );
 }

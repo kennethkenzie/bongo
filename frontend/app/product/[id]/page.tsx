@@ -1,16 +1,17 @@
-import { flashDeals, recommended, moreToLove, trending } from "@/lib/data";
+import { recommended } from "@/lib/data";
+import { api } from "@/lib/api";
 import { formatPrice, compactNumber } from "@/lib/utils";
 import ProductGrid from "@/components/product/ProductGrid";
 import SectionHeader from "@/components/home/SectionHeader";
 import Reviews from "@/components/product/Reviews";
+import QandA from "@/components/product/QandA";
+import { Store } from "lucide-react";
 import { Heart, ShoppingCart, Star, Truck, ShieldCheck, RotateCcw, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-const ALL = [...flashDeals, ...recommended, ...moreToLove, ...trending];
-
-export default function ProductPage({ params }: { params: { id: string } }) {
-  const product = ALL.find((p) => p.id === params.id);
+export default async function ProductPage({ params }: { params: { id: string } }) {
+  const product = await api.product(params.id);
   if (!product) return notFound();
   return (
     <div>
@@ -94,7 +95,17 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         </div>
       </div>
 
+      <section className="card p-3 md:p-4 mt-3 flex items-center gap-3">
+        <div className="w-12 h-12 rounded-sm bg-brand-600 text-white grid place-items-center font-extrabold">B</div>
+        <div>
+          <div className="font-semibold">Bongo Premium Store</div>
+          <div className="text-xs text-ink-muted">98.3% positive feedback · 12K followers</div>
+        </div>
+        <Link href="/store/1" className="btn-outline ml-auto text-sm py-1.5"><Store size={14} className="mr-2" /> Visit Store</Link>
+      </section>
+
       <Reviews rating={product.rating} sold={product.sold} />
+      <QandA />
 
       <SectionHeader title="You may also like" href="#" />
       <ProductGrid products={recommended} cols="dense" compact />
