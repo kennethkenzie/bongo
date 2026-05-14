@@ -33,14 +33,13 @@
     <div class="bg-white rounded-sm border border-line p-5 shadow-admin">
       <h2 class="font-bold">Quick settings links</h2>
       <div class="mt-3 grid gap-2 text-sm">
+        @foreach($sections as $key => $item)
+          <a href="{{ route('admin.settings.show', $key) }}" class="border border-line rounded-sm px-3 py-2 hover:bg-brand-50 hover:text-brand-700 inline-flex items-center justify-between">
+            <span class="inline-flex items-center gap-2"><x-icon name="circle" :size="10" :stroke="2" /> {{ $item['label'] }}</span> <x-icon name="arrow-right" :size="13" />
+          </a>
+        @endforeach
         <a href="{{ route('admin.roles.index') }}" class="border border-line rounded-sm px-3 py-2 hover:bg-brand-50 hover:text-brand-700 inline-flex items-center justify-between">
           Roles & permissions <x-icon name="arrow-right" :size="13" />
-        </a>
-        <a href="{{ route('admin.users.index') }}" class="border border-line rounded-sm px-3 py-2 hover:bg-brand-50 hover:text-brand-700 inline-flex items-center justify-between">
-          User management <x-icon name="arrow-right" :size="13" />
-        </a>
-        <a href="{{ route('admin.products.index') }}" class="border border-line rounded-sm px-3 py-2 hover:bg-brand-50 hover:text-brand-700 inline-flex items-center justify-between">
-          Product catalog <x-icon name="arrow-right" :size="13" />
         </a>
       </div>
     </div>

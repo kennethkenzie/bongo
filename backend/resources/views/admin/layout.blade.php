@@ -109,9 +109,31 @@ tailwind.config = {
             <x-icon name="chevron-down" :size="14" class="transition group-open:rotate-180" />
           </summary>
           <div class="ml-4 mt-1 pl-3 border-l border-line space-y-1">
-            <a href="{{ route('admin.settings.index') }}" class="{{ $navLink }} py-1.5 {{ request()->routeIs('admin.settings.*') ? $childActive : $childIdle }}">
-              <x-icon name="cog" :size="15" /> Store settings
+            <a href="{{ route('admin.settings.index') }}" class="{{ $navLink }} py-1.5 {{ request()->routeIs('admin.settings.index') ? $childActive : $childIdle }}">
+              <x-icon name="cog" :size="15" /> Settings overview
             </a>
+            @php
+              $settingsLinks = [
+                'business' => 'Business Settings',
+                'features' => 'Features activation',
+                'languages' => 'Languages',
+                'currency' => 'Currency',
+                'tax' => 'Vat & TAX',
+                'pickup' => 'Pickup point',
+                'smtp' => 'SMTP Settings',
+                'filesystem-cache' => 'File System & Cache Configuration',
+                'social-logins' => 'Social media Logins',
+                'facebook' => 'Facebook',
+                'google' => 'Google',
+                'shipping' => 'Shipping',
+              ];
+            @endphp
+            @foreach($settingsLinks as $slug => $label)
+              <a href="{{ route('admin.settings.show', $slug) }}"
+                 class="{{ $navLink }} py-1.5 text-xs {{ request()->routeIs('admin.settings.show') && request()->route('section') === $slug ? $childActive : $childIdle }}">
+                <x-icon name="circle" :size="10" :stroke="2" class="opacity-70" /> <span>{{ $label }}</span>
+              </a>
+            @endforeach
             <a href="{{ route('admin.roles.index') }}" class="{{ $navLink }} py-1.5 {{ request()->routeIs('admin.roles.*') ? $childActive : $childIdle }}">
               <x-icon name="lock" :size="15" /> Roles & permissions
             </a>

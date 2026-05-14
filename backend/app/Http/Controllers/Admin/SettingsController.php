@@ -3,14 +3,135 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class SettingsController extends Controller
 {
+    public static function sections(): array
+    {
+        return [
+            'business' => [
+                'label' => 'Business Settings',
+                'description' => 'Store identity, address, contact, storefront and legal business profile.',
+                'fields' => [
+                    ['Business name', config('app.name', 'Estate Bongo Online')],
+                    ['Business email', env('MAIL_FROM_ADDRESS', 'hello@estatebongo.com')],
+                    ['Storefront URL', env('FRONTEND_URL', 'http://localhost:3000')],
+                    ['Support phone', '+255 000 000 000'],
+                ],
+            ],
+            'features' => [
+                'label' => 'Features activation',
+                'description' => 'Turn marketplace modules on/off as your platform grows.',
+                'fields' => [
+                    ['Multi-vendor marketplace', 'Enabled'],
+                    ['Flash deals', 'Enabled'],
+                    ['Wishlist', 'Enabled'],
+                    ['Customer reviews', 'Enabled'],
+                ],
+            ],
+            'languages' => [
+                'label' => 'Languages',
+                'description' => 'Configure storefront and admin languages.',
+                'fields' => [
+                    ['Default language', 'English'],
+                    ['Supported languages', 'English, Swahili'],
+                    ['RTL support', 'Disabled'],
+                ],
+            ],
+            'currency' => [
+                'label' => 'Currency',
+                'description' => 'Set default currency, exchange display, and money formatting.',
+                'fields' => [
+                    ['Default currency', 'USD'],
+                    ['Secondary currency', 'TZS'],
+                    ['Price precision', '2 decimals'],
+                ],
+            ],
+            'tax' => [
+                'label' => 'Vat & TAX',
+                'description' => 'Tax registration, VAT rules, invoices, and tax-inclusive pricing.',
+                'fields' => [
+                    ['VAT enabled', 'Disabled'],
+                    ['VAT rate', '18%'],
+                    ['Prices include tax', 'No'],
+                ],
+            ],
+            'pickup' => [
+                'label' => 'Pickup point',
+                'description' => 'Pickup locations, opening hours, and customer collection settings.',
+                'fields' => [
+                    ['Pickup enabled', 'Disabled'],
+                    ['Default pickup point', 'Main warehouse'],
+                    ['Customer pickup code', 'Enabled'],
+                ],
+            ],
+            'smtp' => [
+                'label' => 'SMTP Settings',
+                'description' => 'Outgoing email server settings for order and account notifications.',
+                'fields' => [
+                    ['Mailer', env('MAIL_MAILER', 'log')],
+                    ['SMTP host', env('MAIL_HOST', '127.0.0.1')],
+                    ['From address', env('MAIL_FROM_ADDRESS', 'hello@example.com')],
+                ],
+            ],
+            'filesystem-cache' => [
+                'label' => 'File System & Cache Configuration',
+                'description' => 'Storage disks, uploaded assets, cache driver, sessions, and queue cache.',
+                'fields' => [
+                    ['Default filesystem', env('FILESYSTEM_DISK', 'local')],
+                    ['Product uploads', 'public/products'],
+                    ['Cache driver', env('CACHE_STORE', 'database')],
+                    ['Session driver', env('SESSION_DRIVER', 'database')],
+                ],
+            ],
+            'social-logins' => [
+                'label' => 'Social media Logins',
+                'description' => 'Global social login controls and OAuth callback configuration.',
+                'fields' => [
+                    ['Social login enabled', 'Disabled'],
+                    ['Callback base URL', url('/auth/callback')],
+                    ['Auto-create accounts', 'Enabled'],
+                ],
+            ],
+            'facebook' => [
+                'label' => 'Facebook',
+                'description' => 'Facebook login, pixel, catalog sync, and Meta commerce settings.',
+                'fields' => [
+                    ['Facebook login', 'Disabled'],
+                    ['App ID', 'Not configured'],
+                    ['Pixel ID', 'Not configured'],
+                ],
+            ],
+            'google' => [
+                'label' => 'Google',
+                'description' => 'Google login, analytics, tags, and Merchant Center integrations.',
+                'fields' => [
+                    ['Google login', 'Disabled'],
+                    ['Google Analytics', 'Not configured'],
+                    ['Merchant Center feed', 'Disabled'],
+                ],
+            ],
+            'shipping' => [
+                'label' => 'Shipping',
+                'description' => 'Delivery methods, rates, zones, carrier partners, and free shipping rules.',
+                'fields' => [
+                    ['Free shipping threshold', '$50.00'],
+                    ['Default shipping label', 'Free shipping'],
+                    ['Express delivery', 'Enabled'],
+                    ['International shipping', 'Disabled'],
+                ],
+            ],
+        ];
+    }
+
     public function index()
     {
         abort_unless(auth()->user()->isAdmin(), 403);
 
         return view('admin.settings.index', [
+            'sections' => self::sections(),
             'settings' => [
                 ['Store name', config('app.name', 'Estate Bongo Online'), 'Public name shown across admin/API responses.'],
                 ['Storefront URL', env('FRONTEND_URL', 'http://localhost:3000'), 'External customer-facing Next.js storefront.'],
@@ -19,6 +140,20 @@ class SettingsController extends Controller
                 ['Currency', 'USD', 'Default currency used by seeded products and order totals.'],
                 ['Image uploads', 'public/products', 'Uploaded product images are stored on the public disk.'],
             ],
+        ]);
+    }
+
+    public function show(string $section)
+    {
+        abort_unless(auth()->user()->isAdmin(), 403);
+
+        $sections = self::sections();
+        abort_unless(isset($sections[$section]), 404);
+
+        return view('admin.settings.section', [
+            'slug' => $section,
+            'section' => $sections[$section],
+            'sections' => $sections,
         ]);
     }
 }
