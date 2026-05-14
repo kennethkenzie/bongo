@@ -56,19 +56,29 @@ tailwind.config = {
           <x-icon name="dashboard" :size="17" /> <span>Overview</span>
         </a>
 
-        <details class="group" @if(request()->routeIs('admin.products.*') || request()->routeIs('admin.categories.*')) open @endif>
-          <summary class="{{ $navLink }} cursor-pointer {{ request()->routeIs('admin.products.*') || request()->routeIs('admin.categories.*') ? 'text-brand-700 bg-brand-50' : $navIdle }}">
+        <details class="group" @if(request()->routeIs('admin.products.*') || request()->routeIs('admin.categories.*') || request()->routeIs('admin.catalog.*')) open @endif>
+          <summary class="{{ $navLink }} cursor-pointer {{ request()->routeIs('admin.products.*') || request()->routeIs('admin.categories.*') || request()->routeIs('admin.catalog.*') ? 'text-brand-700 bg-brand-50' : $navIdle }}">
             <x-icon name="archive-box" :size="17" />
             <span class="flex-1">Catalog</span>
             <x-icon name="chevron-down" :size="14" class="transition group-open:rotate-180" />
           </summary>
           <div class="ml-4 mt-1 pl-3 border-l border-line space-y-1">
-            <a href="{{ route('admin.products.index') }}" class="{{ $navLink }} py-1.5 {{ request()->routeIs('admin.products.*') ? $childActive : $childIdle }}">
-              <x-icon name="cube" :size="15" /> Products
-            </a>
-            <a href="{{ route('admin.categories.index') }}" class="{{ $navLink }} py-1.5 {{ request()->routeIs('admin.categories.*') ? $childActive : $childIdle }}">
-              <x-icon name="tag" :size="15" /> Categories
-            </a>
+            <a href="{{ route('admin.products.create') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.products.create') ? $childActive : $childIdle }}">Add New Product</a>
+            <a href="{{ route('admin.products.index') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.products.index') && !request()->query() ? $childActive : $childIdle }}">All products</a>
+            <a href="{{ route('admin.catalog.show', 'in-house-products') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.catalog.show') && request()->route('page') === 'in-house-products' ? $childActive : $childIdle }}">In House Products</a>
+            <a href="{{ route('admin.catalog.show', 'digital-products') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.catalog.show') && request()->route('page') === 'digital-products' ? $childActive : $childIdle }}">Add New Digital Product</a>
+            <a href="{{ route('admin.catalog.show', 'seller-products') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.catalog.show') && request()->route('page') === 'seller-products' ? $childActive : $childIdle }}">Seller Product</a>
+            <a href="{{ route('admin.catalog.show', 'bulk-import') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.catalog.show') && request()->route('page') === 'bulk-import' ? $childActive : $childIdle }}">Bulk Import</a>
+            <a href="{{ route('admin.catalog.show', 'bulk-export') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.catalog.show') && request()->route('page') === 'bulk-export' ? $childActive : $childIdle }}">Bulk Export</a>
+            <a href="{{ route('admin.categories.index') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.categories.*') ? $childActive : $childIdle }}">Category</a>
+            <a href="{{ route('admin.catalog.show', 'brands') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.catalog.show') && request()->route('page') === 'brands' ? $childActive : $childIdle }}">Brand</a>
+            <a href="{{ route('admin.catalog.show', 'custom-labels') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.catalog.show') && request()->route('page') === 'custom-labels' ? $childActive : $childIdle }}">Custom Label</a>
+            <a href="{{ route('admin.catalog.show', 'attributes') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.catalog.show') && request()->route('page') === 'attributes' ? $childActive : $childIdle }}">Attribute</a>
+            <a href="{{ route('admin.catalog.show', 'colors') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.catalog.show') && request()->route('page') === 'colors' ? $childActive : $childIdle }}">Colors</a>
+            <a href="{{ route('admin.catalog.show', 'size-guides') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.catalog.show') && request()->route('page') === 'size-guides' ? $childActive : $childIdle }}">Size Guide</a>
+            <a href="{{ route('admin.catalog.show', 'warranties') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.catalog.show') && request()->route('page') === 'warranties' ? $childActive : $childIdle }}">Warranty</a>
+            <a href="{{ route('admin.catalog.show', 'smart-bars') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.catalog.show') && request()->route('page') === 'smart-bars' ? $childActive : $childIdle }}">Smart Bar</a>
+            <a href="{{ route('admin.catalog.show', 'reviews') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.catalog.show') && request()->route('page') === 'reviews' ? $childActive : $childIdle }}">Product Reviews</a>
           </div>
         </details>
 

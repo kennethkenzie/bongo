@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
+use App\Http\Controllers\Admin\CatalogPageController as AdminCatalogPageController;
 
 // Root: send visitors to the admin console.
 Route::get('/', fn () => redirect('/admin'));
@@ -35,6 +36,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::resource('products', AdminProductController::class)
         ->except(['show']);
+    Route::get('/catalog/{page}', [AdminCatalogPageController::class, 'show'])->name('catalog.show');
 
     Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
     Route::post('/categories', [AdminCategoryController::class, 'store'])->name('categories.store');
