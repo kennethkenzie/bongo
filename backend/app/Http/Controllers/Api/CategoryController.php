@@ -19,7 +19,7 @@ class CategoryController extends Controller
         $cat = Category::where('slug', $slug)->firstOrFail();
         return response()->json([
             'category' => $cat,
-            'products' => $cat->products()->paginate(24),
+            'products' => $cat->products()->where('is_active', true)->latest()->paginate(24),
         ]);
     }
 }

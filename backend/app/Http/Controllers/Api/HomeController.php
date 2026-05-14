@@ -13,10 +13,10 @@ class HomeController extends Controller
     {
         return response()->json([
             'categories'   => Category::where('is_active', true)->orderBy('sort_order')->limit(14)->get(),
-            'flash_deals'  => Product::where('is_active', true)->where('discount', '>=', 30)->limit(10)->get(),
-            'recommended'  => Product::where('is_active', true)->inRandomOrder()->limit(12)->get(),
+            'flash_deals'  => Product::where('is_active', true)->where('discount', '>=', 30)->latest()->limit(10)->get(),
+            'recommended'  => Product::where('is_active', true)->latest()->limit(12)->get(),
             'trending'     => Product::where('is_active', true)->orderBy('sold', 'desc')->limit(10)->get(),
-            'more_to_love' => Product::where('is_active', true)->inRandomOrder()->limit(24)->get(),
+            'more_to_love' => Product::where('is_active', true)->latest()->limit(24)->get(),
         ]);
     }
 }

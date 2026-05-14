@@ -23,7 +23,7 @@ class ProductController extends Controller
             'price_desc' => $q->orderByDesc('price'),
             'newest'     => $q->orderByDesc('created_at'),
             'orders'     => $q->orderByDesc('sold'),
-            default      => $q->orderByDesc('rating'),
+            default      => $q->latest(),
         };
 
         return response()->json($q->paginate(24));
@@ -36,24 +36,24 @@ class ProductController extends Controller
 
     public function flashDeals()
     {
-        return response()->json(Product::where('discount', '>=', 30)->limit(10)->get());
+        return response()->json(Product::where('is_active', true)->where('discount', '>=', 30)->latest()->limit(10)->get());
     }
 
     public function recommended()
     {
-        return response()->json(Product::inRandomOrder()->limit(20)->get());
+        return response()->json(Product::where('is_active', true)->latest()->limit(20)->get());
     }
 
     public function trending()
     {
-        return response()->json(Product::orderByDesc('sold')->limit(20)->get());
+        return response()->json(Product::where('is_active', true)->orderByDesc('sold')->limit(20)->get());
     }
 
     public function search(Request $r)
     {
         $q = $r->input('q');
         return response()->json(
-            Product::where('title', 'like', "%{$q}%")->paginate(24)
+            Product::where('is_active', true)->where('title', 'like', "%{$q}%")->latest()->paginate(24)
         );
     }
 }
