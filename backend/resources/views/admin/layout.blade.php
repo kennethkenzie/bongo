@@ -82,6 +82,21 @@ tailwind.config = {
           </div>
         </details>
 
+
+        <details class="group" @if(request()->routeIs('admin.ai.*')) open @endif>
+          <summary class="{{ $navLink }} cursor-pointer {{ request()->routeIs('admin.ai.*') ? 'text-brand-700 bg-brand-50' : $navIdle }}">
+            <x-icon name="sparkles" :size="17" />
+            <span class="flex-1">AI Studio</span>
+            <x-icon name="chevron-down" :size="14" class="transition group-open:rotate-180" />
+          </summary>
+          <div class="ml-4 mt-1 pl-3 border-l border-line space-y-1">
+            <a href="{{ route('admin.ai.product') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.ai.product') ? $childActive : $childIdle }}">Add/Edit Product With AI</a>
+            <a href="{{ route('admin.ai.templates') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.ai.templates') ? $childActive : $childIdle }}">Prompt Templates</a>
+            <a href="{{ route('admin.ai.usage') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.ai.usage') ? $childActive : $childIdle }}">Token Usage</a>
+            <a href="{{ route('admin.ai.configuration') }}" class="block px-3 py-1.5 rounded-sm text-xs transition {{ request()->routeIs('admin.ai.configuration') ? $childActive : $childIdle }}">AI Configuration</a>
+          </div>
+        </details>
+
         <details class="group" @if(request()->routeIs('admin.orders.*')) open @endif>
           <summary class="{{ $navLink }} cursor-pointer {{ request()->routeIs('admin.orders.*') ? 'text-brand-700 bg-brand-50' : $navIdle }}">
             <x-icon name="shopping-cart" :size="17" />

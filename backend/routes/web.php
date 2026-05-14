@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\Admin\CatalogPageController as AdminCatalogPageController;
+use App\Http\Controllers\Admin\AiStudioController as AdminAiStudioController;
 
 // Root: send visitors to the admin console.
 Route::get('/', fn () => redirect('/admin'));
@@ -55,6 +56,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
     Route::post('/categories', [AdminCategoryController::class, 'store'])->name('categories.store');
     Route::delete('/categories/{category}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
+
+    Route::get('/ai-studio/product', [AdminAiStudioController::class, 'product'])->name('ai.product');
+    Route::get('/ai-studio/templates', [AdminAiStudioController::class, 'templates'])->name('ai.templates');
+    Route::get('/ai-studio/usage', [AdminAiStudioController::class, 'usage'])->name('ai.usage');
+    Route::get('/ai-studio/configuration', [AdminAiStudioController::class, 'configuration'])->name('ai.configuration');
 
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/inhouse', [AdminOrderController::class, 'inhouse'])->name('orders.inhouse');
