@@ -109,9 +109,6 @@ tailwind.config = {
             <x-icon name="chevron-down" :size="14" class="transition group-open:rotate-180" />
           </summary>
           <div class="ml-4 mt-1 pl-3 border-l border-line space-y-1">
-            <a href="{{ route('admin.settings.index') }}" class="{{ $navLink }} py-1.5 {{ request()->routeIs('admin.settings.index') ? $childActive : $childIdle }}">
-              <x-icon name="cog" :size="15" /> Settings overview
-            </a>
             @php
               $settingsLinks = [
                 'business' => 'Business Settings',
