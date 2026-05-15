@@ -23,6 +23,10 @@ Route::get('/status', fn () => response()->json([
     'admin'   => url('/admin'),
 ]));
 
+// Laravel's default auth middleware looks for a route named `login`.
+// Point it to the admin login screen because this app is admin-first.
+Route::get('/login', fn () => redirect()->route('admin.login'))->name('login');
+
 // Admin login (guest-only)
 Route::middleware('guest')->group(function () {
     Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])->name('admin.login');
