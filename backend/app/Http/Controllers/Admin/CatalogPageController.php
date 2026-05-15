@@ -3,8 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\Category;
+use App\Models\CustomLabel;
 use App\Models\Product;
+use App\Models\ProductAttribute;
+use App\Models\ProductColor;
+use App\Models\SizeGuide;
+use App\Models\SmartBar;
+use App\Models\Warranty;
 
 class CatalogPageController extends Controller
 {
@@ -32,26 +39,55 @@ class CatalogPageController extends Controller
     public function sellerProducts() { return $this->render('seller-products'); }
     public function bulkImport() { return $this->render('bulk-import'); }
     public function bulkExport() { return $this->render('bulk-export'); }
-    public function brands() { return $this->renderDedicated('brands', 'admin.catalog.brands'); }
-    public function customLabels() { return $this->renderDedicated('custom-labels', 'admin.catalog.custom_labels'); }
-    public function attributes() { return $this->renderDedicated('attributes', 'admin.catalog.attributes'); }
-    public function colors() { return $this->renderDedicated('colors', 'admin.catalog.colors'); }
-    public function sizeGuides() { return $this->renderDedicated('size-guides', 'admin.catalog.size_guides'); }
-    public function warranties() { return $this->renderDedicated('warranties', 'admin.catalog.warranties'); }
-    public function smartBars() { return $this->renderDedicated('smart-bars', 'admin.catalog.smart_bars'); }
     public function reviews() { return $this->renderDedicated('reviews', 'admin.catalog.reviews'); }
+
+    public function brands()
+    {
+        return $this->renderDedicated('brands', 'admin.catalog.brands', ['brands' => Brand::latest()->paginate(20)]);
+    }
+
+    public function customLabels()
+    {
+        return $this->renderDedicated('custom-labels', 'admin.catalog.custom_labels', ['labels' => CustomLabel::latest()->get()]);
+    }
+
+    public function attributes()
+    {
+        return $this->renderDedicated('attributes', 'admin.catalog.attributes', ['attributes' => ProductAttribute::latest()->get()]);
+    }
+
+    public function colors()
+    {
+        return $this->renderDedicated('colors', 'admin.catalog.colors', ['colors' => ProductColor::latest()->get()]);
+    }
+
+    public function sizeGuides()
+    {
+        return $this->renderDedicated('size-guides', 'admin.catalog.size_guides', ['sizeGuides' => SizeGuide::latest()->get()]);
+    }
+
+    public function warranties()
+    {
+        return $this->renderDedicated('warranties', 'admin.catalog.warranties', ['warranties' => Warranty::latest()->get()]);
+    }
+
+    public function smartBars()
+    {
+        return $this->renderDedicated('smart-bars', 'admin.catalog.smart_bars', ['smartBars' => SmartBar::latest()->get()]);
+    }
+
 
     public function show(string $page)
     {
         return $this->render($page);
     }
 
-    protected function renderDedicated(string $page, string $view)
+    protected function renderDedicated(string $page, string $view, array $extra = [])
     {
         $pages = self::pages();
         abort_unless(isset($pages[$page]), 404);
 
-        return view($view, $this->payload($page, $pages));
+        return view($view, $extra + $this->payload($page, $pages));
     }
 
     protected function render(string $page)

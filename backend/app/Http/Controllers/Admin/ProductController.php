@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -31,8 +32,9 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::orderBy('name')->get();
+        $brands = Brand::where('is_active', true)->orderBy('name')->get();
         $product = new Product();
-        return view('admin.products.form', compact('product', 'categories'));
+        return view('admin.products.form', compact('product', 'categories', 'brands'));
     }
 
     public function store(Request $request)
@@ -48,7 +50,8 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $categories = Category::orderBy('name')->get();
-        return view('admin.products.form', compact('product', 'categories'));
+        $brands = Brand::where('is_active', true)->orderBy('name')->get();
+        return view('admin.products.form', compact('product', 'categories', 'brands'));
     }
 
     public function update(Request $request, Product $product)
@@ -76,7 +79,7 @@ class ProductController extends Controller
 
     protected function validated(Request $request): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'title'          => 'required|string|max:255',
             'category_id'    => 'nullable|exists:categories,id',
             'description'    => 'nullable|string',
@@ -90,7 +93,23 @@ class ProductController extends Controller
             'shipping'       => 'nullable|string|max:60',
             'free_shipping'  => 'boolean',
             'is_active'      => 'boolean',
+            'brand'          => 'nullable|string|max:255',
+            'custom_label'   => 'nullable|string|max:100',
+            'smart_bar'      => 'nullable|string|max:255',
+            'colors'         => 'nullable|string',
+            'attributes'     => 'nullable|string',
+            'size_guide'     => 'nullable|string',
+            'warranty'       => 'nullable|string',
         ]);
+
+        foreach (['colors', 'attributes'] as $field) {
+            if (isset($data[$field]) && is_string($data[$field])) {
+                $decoded = json_decode($data[$field], true);
+                $data[$field] = is_array($decoded) ? $decoded : null;
+            }
+        }
+
+        return $data;
     }
 
     /**

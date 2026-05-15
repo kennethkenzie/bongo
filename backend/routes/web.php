@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\Admin\CatalogPageController as AdminCatalogPageController;
 use App\Http\Controllers\Admin\AiStudioController as AdminAiStudioController;
+use App\Http\Controllers\Admin\CatalogCrudController as AdminCatalogCrudController;
 
 // Root: send visitors to the admin console.
 Route::get('/', fn () => redirect('/admin'));
@@ -45,12 +46,32 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/catalog/bulk-import', [AdminCatalogPageController::class, 'bulkImport'])->name('catalog.import');
     Route::get('/catalog/bulk-export', [AdminCatalogPageController::class, 'bulkExport'])->name('catalog.export');
     Route::get('/catalog/brands', [AdminCatalogPageController::class, 'brands'])->name('catalog.brands');
+    Route::post('/catalog/brands', [AdminCatalogCrudController::class, 'storeBrand'])->name('catalog.brands.store');
+    Route::delete('/catalog/brands/{brand}', [AdminCatalogCrudController::class, 'destroyBrand'])->name('catalog.brands.destroy');
+
     Route::get('/catalog/custom-labels', [AdminCatalogPageController::class, 'customLabels'])->name('catalog.labels');
+    Route::post('/catalog/custom-labels', [AdminCatalogCrudController::class, 'storeLabel'])->name('catalog.labels.store');
+    Route::delete('/catalog/custom-labels/{customLabel}', [AdminCatalogCrudController::class, 'destroyLabel'])->name('catalog.labels.destroy');
+
     Route::get('/catalog/attributes', [AdminCatalogPageController::class, 'attributes'])->name('catalog.attributes');
+    Route::post('/catalog/attributes', [AdminCatalogCrudController::class, 'storeAttribute'])->name('catalog.attributes.store');
+    Route::delete('/catalog/attributes/{productAttribute}', [AdminCatalogCrudController::class, 'destroyAttribute'])->name('catalog.attributes.destroy');
+
     Route::get('/catalog/colors', [AdminCatalogPageController::class, 'colors'])->name('catalog.colors');
+    Route::post('/catalog/colors', [AdminCatalogCrudController::class, 'storeColor'])->name('catalog.colors.store');
+    Route::delete('/catalog/colors/{productColor}', [AdminCatalogCrudController::class, 'destroyColor'])->name('catalog.colors.destroy');
+
     Route::get('/catalog/size-guides', [AdminCatalogPageController::class, 'sizeGuides'])->name('catalog.size_guides');
+    Route::post('/catalog/size-guides', [AdminCatalogCrudController::class, 'storeSizeGuide'])->name('catalog.size_guides.store');
+    Route::delete('/catalog/size-guides/{sizeGuide}', [AdminCatalogCrudController::class, 'destroySizeGuide'])->name('catalog.size_guides.destroy');
+
     Route::get('/catalog/warranties', [AdminCatalogPageController::class, 'warranties'])->name('catalog.warranties');
+    Route::post('/catalog/warranties', [AdminCatalogCrudController::class, 'storeWarranty'])->name('catalog.warranties.store');
+    Route::delete('/catalog/warranties/{warranty}', [AdminCatalogCrudController::class, 'destroyWarranty'])->name('catalog.warranties.destroy');
+
     Route::get('/catalog/smart-bars', [AdminCatalogPageController::class, 'smartBars'])->name('catalog.smart_bars');
+    Route::post('/catalog/smart-bars', [AdminCatalogCrudController::class, 'storeSmartBar'])->name('catalog.smart_bars.store');
+    Route::delete('/catalog/smart-bars/{smartBar}', [AdminCatalogCrudController::class, 'destroySmartBar'])->name('catalog.smart_bars.destroy');
     Route::get('/catalog/reviews', [AdminCatalogPageController::class, 'reviews'])->name('catalog.reviews');
     Route::get('/catalog/{page}', [AdminCatalogPageController::class, 'show'])->name('catalog.show');
 
