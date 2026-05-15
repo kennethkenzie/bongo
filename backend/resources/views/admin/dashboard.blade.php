@@ -128,22 +128,55 @@
     </ul>
   </div>
 
-  <div class="bg-white rounded-sm border border-line shadow-admin">
+  <div class="bg-white rounded-sm border border-line shadow-admin overflow-hidden">
     <div class="px-4 py-3 border-b border-line">
       <h2 class="font-bold">Category mix</h2>
-      <p class="text-xs text-gray-500">Largest product groups.</p>
+      <p class="text-xs text-gray-500">Product distribution across all levels.</p>
     </div>
-    <div class="p-4 space-y-3">
-      @foreach ($categoryMix as $cat)
+    <div class="p-4 space-y-2 max-h-80 overflow-y-auto">
+      @forelse ($categoryMix as $cat)
+        {{-- Root --}}
         @php $pct = $productCount ? min(100, round(($cat->products_count / $productCount) * 100)) : 0; @endphp
         <div>
           <div class="flex items-center justify-between text-sm mb-1">
-            <span>{{ $cat->name }}</span>
-            <span class="text-gray-500">{{ $cat->products_count }}</span>
+            <span class="font-semibold">{{ $cat->name }}</span>
+            <span class="text-gray-500 text-xs">{{ $cat->products_count }}</span>
           </div>
-          <div class="h-2 bg-surface rounded-sm overflow-hidden"><div class="h-full bg-emerald-500" style="width: {{ $pct }}%"></div></div>
+          <div class="h-1.5 bg-surface rounded-sm overflow-hidden">
+            <div class="h-full bg-emerald-500" style="width: {{ $pct }}%"></div>
+          </div>
         </div>
-      @endforeach
+
+        @foreach ($cat->children as $sub)
+          {{-- Sub-category --}}
+          @php $pct2 = $productCount ? min(100, round(($sub->products_count / $productCount) * 100)) : 0; @endphp
+          <div class="pl-4">
+            <div class="flex items-center justify-between text-sm mb-1">
+              <span class="text-gray-700">- {{ $sub->name }}</span>
+              <span class="text-gray-400 text-xs">{{ $sub->products_count }}</span>
+            </div>
+            <div class="h-1.5 bg-surface rounded-sm overflow-hidden">
+              <div class="h-full bg-emerald-400" style="width: {{ $pct2 }}%"></div>
+            </div>
+          </div>
+
+          @foreach ($sub->children as $grand)
+            {{-- Sub-sub-category --}}
+            @php $pct3 = $productCount ? min(100, round(($grand->products_count / $productCount) * 100)) : 0; @endphp
+            <div class="pl-8">
+              <div class="flex items-center justify-between text-sm mb-1">
+                <span class="text-gray-500">-- {{ $grand->name }}</span>
+                <span class="text-gray-400 text-xs">{{ $grand->products_count }}</span>
+              </div>
+              <div class="h-1.5 bg-surface rounded-sm overflow-hidden">
+                <div class="h-full bg-emerald-300" style="width: {{ $pct3 }}%"></div>
+              </div>
+            </div>
+          @endforeach
+        @endforeach
+      @empty
+        <p class="text-sm text-gray-400 text-center py-4">No categories yet.</p>
+      @endforelse
     </div>
   </div>
 </div>

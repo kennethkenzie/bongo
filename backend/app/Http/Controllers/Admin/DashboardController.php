@@ -22,9 +22,14 @@ class DashboardController extends Controller
             ->groupBy('status')
             ->pluck('total', 'status');
 
-        $categoryMix = Category::withCount('products')
+        $categoryMix = Category::whereNull('parent_id')
+            ->withCount('products')
+            ->with([
+                'children' => fn ($q) => $q->withCount('products')->with([
+                    'children' => fn ($q) => $q->withCount('products'),
+                ]),
+            ])
             ->orderByDesc('products_count')
-            ->limit(6)
             ->get();
 
         return view('admin.dashboard', [

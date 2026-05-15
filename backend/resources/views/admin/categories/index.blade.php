@@ -1,7 +1,7 @@
 @extends('admin.layout', ['title' => 'Categories', 'subtitle' => 'Organize marketplace departments and category landing pages.'])
 @section('content')
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
-  <form method="POST" action="{{ route('admin.categories.store') }}" class="bg-white rounded-sm border border-line p-4 shadow-admin h-fit text-sm">
+  <form method="POST" action="{{ route('admin.categories.store') }}" enctype="multipart/form-data" class="bg-white rounded-sm border border-line p-4 shadow-admin h-fit text-sm">
     @csrf
     <h2 class="font-bold mb-1">New category</h2>
     <p class="text-xs text-gray-500 mb-3">Add a new storefront category.</p>
@@ -10,8 +10,9 @@
       <input name="name" placeholder="e.g. Phones & Telecom" required class="mt-1 w-full border border-line rounded-sm px-3 py-2 focus:outline-none focus:border-brand-600">
     </label>
     <label class="block mb-3">
-      <span class="text-xs text-gray-500">Image URL</span>
-      <input name="image" placeholder="https://…" class="mt-1 w-full border border-line rounded-sm px-3 py-2 focus:outline-none focus:border-brand-600">
+      <span class="text-xs text-gray-500">Category image</span>
+      <input name="image_file" type="file" accept="image/*" class="mt-1 block w-full text-sm file:mr-3 file:px-3 file:py-1.5 file:rounded-sm file:border-0 file:bg-brand-600 file:text-white hover:file:bg-brand-700">
+      <span class="block text-[11px] text-gray-400 mt-1">Optional. JPG, PNG, WebP, or GIF up to 4 MB.</span>
     </label>
     <button class="w-full inline-flex items-center justify-center gap-1 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-sm font-semibold">
       <x-icon name="plus" :size="14" /> Create category

@@ -23,8 +23,17 @@
       <span class="text-xs text-gray-500">Category</span>
       <select name="category_id" class="mt-1 w-full border border-line rounded-sm px-3 py-2 bg-white focus:outline-none focus:border-brand-600">
         <option value="">— None —</option>
-        @foreach ($categories as $c)
-          <option value="{{ $c->id }}" @selected(old('category_id', $product->category_id ?? null) == $c->id)>{{ $c->name }}</option>
+        @foreach ($categoryOptions as $opt)
+          @php
+            $label = match($opt['depth']) {
+              1 => '- '.$opt['name'],
+              2 => '-- '.$opt['name'],
+              default => $opt['name'],
+            };
+          @endphp
+          <option value="{{ $opt['id'] }}"
+            @selected(old('category_id', $product->category_id ?? null) == $opt['id'])
+            @if($opt['depth'] === 0) style="font-weight:600" @endif>{{ $label }}</option>
         @endforeach
       </select>
     </label>
@@ -70,16 +79,10 @@
         @endif
         <div class="flex-1 space-y-2">
           <label class="block">
-            <span class="text-xs text-gray-500">Upload from your computer</span>
+            <span class="text-xs text-gray-500">Upload product image</span>
             <input type="file" name="image_file" accept="image/*" id="imgInput"
               class="mt-1 block w-full text-sm file:mr-3 file:px-3 file:py-1.5 file:rounded-sm file:border-0 file:bg-brand-600 file:text-white hover:file:bg-brand-700">
-            <span class="block text-[11px] text-gray-400 mt-1">JPG, PNG, WebP, or GIF up to 4 MB.</span>
-          </label>
-          <label class="block">
-            <span class="text-xs text-gray-500">…or paste an image URL</span>
-            <input name="image" value="{{ old('image', $product->image ?? '') }}" id="imgUrl"
-              placeholder="https://…"
-              class="mt-1 w-full border border-line rounded-sm px-3 py-2 focus:outline-none focus:border-brand-600">
+            <span class="block text-[11px] text-gray-400 mt-1">JPG, PNG, WebP, or GIF up to 4 MB. {{ $isEdit ? 'Leave empty to keep current image.' : 'Required.' }}</span>
           </label>
         </div>
       </div>
@@ -88,7 +91,6 @@
     <script>
       (function () {
         const input = document.getElementById('imgInput');
-        const urlField = document.getElementById('imgUrl');
         const preview = document.getElementById('imgPreview');
         input?.addEventListener('change', (e) => {
           const file = e.target.files?.[0];
@@ -107,8 +109,6 @@
             }
           };
           reader.readAsDataURL(file);
-          // Clear URL field so the upload takes precedence.
-          if (urlField) urlField.value = '';
         });
       })();
     </script>
