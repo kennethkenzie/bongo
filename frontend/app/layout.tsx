@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const currency = await api.currency();
+  const [currency, categories] = await Promise.all([api.currency(), api.categories()]);
   return (
     <html lang="en">
       <body className="min-h-screen bg-surface">
@@ -25,7 +25,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </div>
         <Header />
         <div className="hidden md:block">
-          <CategoryNav />
+          <CategoryNav categories={categories} />
         </div>
         <main className="container-x py-3 pb-24 md:pb-8">{children}</main>
         <Footer />

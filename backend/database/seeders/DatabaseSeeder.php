@@ -59,6 +59,16 @@ class DatabaseSeeder extends Seeder
             "Automotive & Motorcycle", "Tools & Home Improvement", "Toys, Kids & Babies",
         ];
 
+        $menuGroups = function (string $name): array {
+            $base = str_replace([' & ', ', '], ' ', $name);
+            return [
+                ['title' => 'Top Picks', 'links' => ["{$base} Deals", 'New Arrivals', 'Best Sellers', 'Choice Picks', 'Flash Deals', 'Free Shipping']],
+                ['title' => 'Popular', 'links' => ['Accessories', 'Trending Now', 'Premium Selection', 'Budget Finds', 'Top Rated', 'Recently Viewed']],
+                ['title' => 'Shop by Need', 'links' => ['For Home', 'For Work', 'For Travel', 'For Gifts', 'Daily Essentials', 'Wholesale']],
+                ['title' => 'Services', 'links' => ['Buyer Protection', 'Fast Delivery', 'Local Reviews', 'Coupons', 'Bundles', 'Clearance']],
+            ];
+        };
+
         foreach ($categories as $i => $name) {
             $slug = Str::slug($name);
             Category::updateOrCreate(
@@ -66,6 +76,11 @@ class DatabaseSeeder extends Seeder
                 [
                     'name' => $name,
                     'image' => "https://picsum.photos/seed/{$slug}/200/200",
+                    'groups' => $menuGroups($name),
+                    'featured' => [
+                        ['title' => "{$name} Deals · Up to 70%", 'image' => "https://picsum.photos/seed/{$slug}-feat-1/280/180"],
+                        ['title' => "New arrivals in {$name}", 'image' => "https://picsum.photos/seed/{$slug}-feat-2/280/180"],
+                    ],
                     'sort_order' => $i,
                     'is_active' => true,
                 ]

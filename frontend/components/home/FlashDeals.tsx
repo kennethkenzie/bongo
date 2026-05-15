@@ -1,6 +1,6 @@
 "use client";
-import { flashDeals } from "@/lib/data";
 import ProductCard from "@/components/product/ProductCard";
+import type { Product } from "@/lib/types";
 import { Flame, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -31,7 +31,7 @@ function Countdown() {
   );
 }
 
-export default function FlashDeals() {
+export default function FlashDeals({ products }: { products: Product[] }) {
   return (
     <section className="mt-5">
       <div className="card overflow-hidden">
@@ -49,7 +49,7 @@ export default function FlashDeals() {
         </div>
         <div className="p-2 md:p-3">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2 md:gap-3">
-            {flashDeals.slice(0, 6).map((p) => (
+            {products.slice(0, 6).map((p) => (
               <ProductCard key={p.id} product={p} compact />
             ))}
           </div>

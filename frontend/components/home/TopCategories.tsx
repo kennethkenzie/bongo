@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { topCategoryShortcuts } from "@/lib/data";
+import type { Category } from "@/lib/types";
 
-export default function TopCategories() {
+export default function TopCategories({ categories }: { categories: Category[] }) {
   return (
     <section>
       <div className="card p-3 md:p-4">
         <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-3">
-          {topCategoryShortcuts.map((c) => (
+          {categories.slice(0, 12).map((c) => (
             <Link
               key={c.slug}
               href={`/category/${c.slug}`}

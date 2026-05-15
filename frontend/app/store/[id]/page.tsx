@@ -1,10 +1,11 @@
 import ProductGrid from "@/components/product/ProductGrid";
 import SectionHeader from "@/components/home/SectionHeader";
-import { recommended, trending } from "@/lib/data";
+import { api } from "@/lib/api";
 import { Star, MapPin, MessageCircle, Heart, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
-export default function StorePage({ params }: { params: { id: string } }) {
+export default async function StorePage({ params }: { params: { id: string } }) {
+  const { recommended, trending } = await api.home();
   const name = "Bongo Premium Store";
   return (
     <div>

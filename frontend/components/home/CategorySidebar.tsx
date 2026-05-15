@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { categories } from "@/lib/data";
 import { ChevronRight } from "lucide-react";
+import type { Category } from "@/lib/types";
 
-export default function CategorySidebar() {
+export default function CategorySidebar({ categories }: { categories: Category[] }) {
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 

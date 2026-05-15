@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { categories } from "@/lib/data";
+import type { Category } from "@/lib/types";
 import { ChevronDown, Tag } from "lucide-react";
 
 const featured = [
@@ -13,7 +13,7 @@ const featured = [
   "Help Center"
 ];
 
-export default function CategoryNav() {
+export default function CategoryNav({ categories }: { categories: Category[] }) {
   return (
     <nav className="bg-white border-b border-line">
       <div className="container-x flex items-center gap-6 h-10 overflow-x-auto hide-scrollbar text-sm">

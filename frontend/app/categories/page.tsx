@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { categories } from "@/lib/data";
+import { api } from "@/lib/api";
 
-export default function CategoriesPage() {
+export default async function CategoriesPage() {
+  const categories = await api.categories();
   return (
     <div>
       <h1 className="text-xl md:text-2xl font-bold mb-3">All Categories</h1>

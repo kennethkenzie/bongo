@@ -7,20 +7,19 @@ import SectionHeader from "@/components/home/SectionHeader";
 import TopCategories from "@/components/home/TopCategories";
 import HorizontalRail from "@/components/home/HorizontalRail";
 import ProductGrid from "@/components/product/ProductGrid";
-import { topCategoryShortcuts } from "@/lib/data";
 import { api } from "@/lib/api";
 import Link from "next/link";
 
 export default async function HomePage() {
   const data = await api.home();
-  const { recommended, trending, more_to_love: moreToLove } = data;
+  const { categories, flash_deals: flashDeals, recommended, trending, more_to_love: moreToLove } = data;
 
   return (
     <div className="space-y-2">
       {/* Mobile category shortcuts row */}
       <section className="md:hidden card p-3 -mx-3 rounded-none border-x-0">
         <div className="grid grid-cols-5 gap-3">
-          {topCategoryShortcuts.slice(0, 10).map((c) => (
+          {categories.slice(0, 10).map((c) => (
             <Link key={c.slug} href={`/category/${c.slug}`} className="flex flex-col items-center gap-1">
               <div className="w-12 h-12 rounded-sm overflow-hidden border border-line">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -34,7 +33,7 @@ export default async function HomePage() {
 
       {/* Hero + Sidebar + Promo column */}
       <section className="flex gap-3">
-        <CategorySidebar />
+        <CategorySidebar categories={categories} />
         <HeroBanner />
         <PromoColumn />
       </section>
@@ -43,11 +42,11 @@ export default async function HomePage() {
       <PromoStrip />
 
       {/* Flash deals */}
-      <FlashDeals />
+      <FlashDeals products={flashDeals} />
 
       {/* Top categories */}
       <SectionHeader title="Top Categories" href="/categories" />
-      <TopCategories />
+      <TopCategories categories={categories} />
 
       {/* Recommended */}
       <SectionHeader title="Just For You" accent="Recommended" href="#" />

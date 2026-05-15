@@ -1,4 +1,3 @@
-import { recommended } from "@/lib/data";
 import { api } from "@/lib/api";
 import { formatPrice, compactNumber } from "@/lib/utils";
 import ProductGrid from "@/components/product/ProductGrid";
@@ -11,7 +10,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
-  const [product, currency] = await Promise.all([api.product(params.id), api.currency()]);
+  const [product, currency, home] = await Promise.all([api.product(params.id), api.currency(), api.home()]);
+  const recommended = home.recommended;
   if (!product) return notFound();
   return (
     <div>
