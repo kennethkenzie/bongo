@@ -18,6 +18,24 @@ async function safe<T>(url: string, fallback: T): Promise<T> {
   }
 }
 
+
+function apiOrigin() {
+  try {
+    return new URL(API).origin;
+  } catch {
+    return "http://localhost:8000";
+  }
+}
+
+function normalizeAssetUrl(url?: string | null): string {
+  if (!url) return "";
+  if (/^https?:\/\//i.test(url)) return url;
+  if (url.startsWith("/storage/") || url.startsWith("/uploads/")) {
+    return `${apiOrigin()}${url}`;
+  }
+  return url;
+}
+
 type ApiProduct = Omit<Product, "id" | "price" | "rating" | "category"> & {
   id: string | number;
   price: string | number;
@@ -36,6 +54,7 @@ function normalizeProduct(product: ApiProduct): Product {
   return {
     ...product,
     id: String(product.id),
+    image: normalizeAssetUrl(product.image),
     price: Number(product.price),
     originalPrice: originalPrice == null ? undefined : Number(originalPrice),
     rating: Number(product.rating),
