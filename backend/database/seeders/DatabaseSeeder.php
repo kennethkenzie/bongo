@@ -71,7 +71,7 @@ class DatabaseSeeder extends Seeder
 
         foreach ($categories as $i => $name) {
             $slug = Str::slug($name);
-            Category::updateOrCreate(
+            $category = Category::updateOrCreate(
                 ['slug' => $slug],
                 [
                     'name' => $name,
@@ -81,10 +81,37 @@ class DatabaseSeeder extends Seeder
                         ['title' => "{$name} Deals · Up to 70%", 'image' => "https://picsum.photos/seed/{$slug}-feat-1/280/180"],
                         ['title' => "New arrivals in {$name}", 'image' => "https://picsum.photos/seed/{$slug}-feat-2/280/180"],
                     ],
+                    'parent_id' => null,
                     'sort_order' => $i,
                     'is_active' => true,
                 ]
             );
+
+            foreach ($category->groups ?? [] as $groupIndex => $group) {
+                $groupSlug = Str::slug($category->slug.' '.$group['title']);
+                $groupCategory = Category::updateOrCreate(
+                    ['slug' => $groupSlug],
+                    [
+                        'name' => $group['title'],
+                        'image' => $category->image,
+                        'parent_id' => $category->id,
+                        'sort_order' => $groupIndex,
+                        'is_active' => true,
+                    ]
+                );
+
+                foreach (($group['links'] ?? []) as $linkIndex => $link) {
+                    Category::updateOrCreate(
+                        ['slug' => Str::slug($groupSlug.' '.$link)],
+                        [
+                            'name' => $link,
+                            'parent_id' => $groupCategory->id,
+                            'sort_order' => $linkIndex,
+                            'is_active' => true,
+                        ]
+                    );
+                }
+            }
         }
 
         $titles = [
@@ -100,7 +127,7 @@ class DatabaseSeeder extends Seeder
             'Magnetic Car Phone Holder', 'Resistance Bands Set 5-Piece',
         ];
 
-        $cats = Category::pluck('id')->all();
+        $cats = Category::whereNull('parent_id')->pluck('id')->all();
 
         for ($i = 0; $i < 120; $i++) {
             $title = $titles[$i % count($titles)] . ' #' . ($i + 1);

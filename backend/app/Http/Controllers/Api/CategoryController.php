@@ -10,15 +10,21 @@ class CategoryController extends Controller
     public function index()
     {
         return response()->json(
-            Category::where('is_active', true)->orderBy('sort_order')->get()
+            Category::whereNull('parent_id')
+                ->where('is_active', true)
+                ->with('children.children')
+                ->orderBy('sort_order')
+                ->get()
+                ->map(fn (Category $category) => $category->storefrontPayload())
+                ->values()
         );
     }
 
     public function show($slug)
     {
-        $cat = Category::where('slug', $slug)->firstOrFail();
+        $cat = Category::where('slug', $slug)->with('children.children')->firstOrFail();
         return response()->json([
-            'category' => $cat,
+            'category' => $cat->storefrontPayload(),
             'products' => $cat->products()->where('is_active', true)->latest()->paginate(24),
         ]);
     }

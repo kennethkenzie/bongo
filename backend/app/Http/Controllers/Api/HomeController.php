@@ -11,8 +11,17 @@ class HomeController extends Controller
 {
     public function index(): JsonResponse
     {
+        $categories = Category::whereNull('parent_id')
+            ->where('is_active', true)
+            ->with('children.children')
+            ->orderBy('sort_order')
+            ->limit(14)
+            ->get()
+            ->map(fn (Category $category) => $category->storefrontPayload())
+            ->values();
+
         return response()->json([
-            'categories'   => Category::where('is_active', true)->orderBy('sort_order')->limit(14)->get(),
+            'categories'   => $categories,
             'flash_deals'  => Product::where('is_active', true)->where('discount', '>=', 30)->latest()->limit(10)->get(),
             'recommended'  => Product::where('is_active', true)->latest()->limit(12)->get(),
             'trending'     => Product::where('is_active', true)->orderBy('sold', 'desc')->limit(10)->get(),
